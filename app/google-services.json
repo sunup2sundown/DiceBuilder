@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "727011458673",
+    "firebase_url": "https://dicebuilder-15e03.firebaseio.com",
+    "project_id": "dicebuilder-15e03",
+    "storage_bucket": "dicebuilder-15e03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727011458673:android:ebbaecd79c2ac347",
+        "android_client_info": {
+          "package_name": "edu.okami.m.dicebuilder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727011458673-oqs0jvs14rlfd7usrpm5f3ureeklc6ts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxZ7AgF19ISeMoYWFlupNChIc6uCq2_R0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
