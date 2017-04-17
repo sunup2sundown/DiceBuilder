@@ -25,6 +25,7 @@ public class EightSidedMesh extends DiceMesh {
         float faceEightRightBound = (256.0f * 8.0f) / 2048.0f;
         float faceBoundHalfModifier = (128.0f / 2048.0f);
 
+
         float vertices[] =
                 {
                         -halfWidth, 0.0f, halfWidth,

@@ -28,11 +28,11 @@ public class DiceMesh {
 
     public void draw(GL10 gl) {
 
-        //Counter-clockwise winding
+        // Counter-clockwise winding
         gl.glFrontFace(GL10.GL_CCW);
-        //Enable non-rendering of faces
+        // Enable non-rendering of faces
         gl.glEnable(GL10.GL_CULL_FACE);
-        //Choose faces not facing screen to cull
+        // Choose faces not facing screen to cull
         gl.glCullFace(GL10.GL_BACK);
 
         if (mShouldLoadTexture) {

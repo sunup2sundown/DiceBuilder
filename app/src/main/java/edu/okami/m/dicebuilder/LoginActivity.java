@@ -29,6 +29,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button diceRoll = (Button) findViewById(R.id.diceRollButton);
+        diceRoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent diceRollIntent = new Intent(getApplicationContext(), DiceRollActivity.class);
+                startActivity(diceRollIntent);
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

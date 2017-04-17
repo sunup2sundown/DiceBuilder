@@ -19,10 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".textureActivity" />
         <activity
-            android:name=".textureActivity"
-            />
+            android:name=".DiceRollActivity"
+            android:label="@string/title_activity_dice_roll"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
 
 </manifest>

@@ -89,7 +89,6 @@ public class SixSidedMesh extends DiceMesh {
         };
 
         short indices[] = {
-
                 0,1,3,
                 0,3,2,
                 4,5,7,

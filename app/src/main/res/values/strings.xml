@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">DiceBuilder</string>
     <string name="title_activity_texture">textureActivity</string>
+    <string name="title_activity_dice_roll">DiceRollActivity</string>
 </resources>

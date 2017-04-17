@@ -69,5 +69,4 @@ public class FourSidedMesh extends DiceMesh {
         setIndices(indices);
 
     }
-
 }

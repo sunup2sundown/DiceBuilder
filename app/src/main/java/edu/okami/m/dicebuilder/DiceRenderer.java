@@ -22,12 +22,14 @@ public class DiceRenderer extends GLRenderer {
 
     public DiceRenderer(Context c) {
         context = c;
+        /**
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.four_sided_texture);
         bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.full_die_texture);
         bitmap3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.eight_sided_texture);
         bitmap4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.ten_sided_texture);
         bitmap5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.twelve_sided_texture);
         bitmap6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.twenty_sided_die);
+         **/
         four.loadBitmap(bitmap);
         six.loadBitmap(bitmap2);
         eight.loadBitmap(bitmap3);

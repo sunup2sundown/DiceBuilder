@@ -8,7 +8,7 @@ public class TwelveSidedMesh extends DiceMesh {
 
         /**
          Algorithm adapted from: http://userpages.umbc.edu/~squire/reference/polyhedra.shtml#dodecahedron
-         */
+         **/
 
         float verts[][] = new float[20][3];
         double pi = Math.PI;

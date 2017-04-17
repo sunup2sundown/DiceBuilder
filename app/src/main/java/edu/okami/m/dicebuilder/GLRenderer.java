@@ -57,7 +57,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // Select the modelview matrix
         gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-        // Reset the modelview matrix
+        // Reset the model view matrix
         gl.glLoadIdentity();
     }
 }

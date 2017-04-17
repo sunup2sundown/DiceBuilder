@@ -259,6 +259,7 @@ public class TenSidedMesh extends DiceMesh {
                         faceZeroLeftBound + faceBoundHalfModifier, 0.0f
                 };
 
+
         setVertices(vertices);
         setTextureCoordinates(textureCoordinates);
         setIndices(indices);

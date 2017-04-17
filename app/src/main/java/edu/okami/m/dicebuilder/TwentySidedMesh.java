@@ -51,83 +51,83 @@ public class TwentySidedMesh extends DiceMesh {
 
         float vertices[] =
                 {
-                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //1 Face!
+                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //1 Face
                         0.0f, (goldenRatio * scaleFactor), scaleFactor, //4
                         scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1
 
-                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //2 Face!
+                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //2 Face
                         -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2
                         -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11
 
-                        scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1 //3 Face!
+                        scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1 //3 Face
                         (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8
                         (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10
 
-                        -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2 //4 Face!
+                        -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2 //4 Face
                         0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5
                         -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9
 
-                        -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9 //5 Face!
+                        -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9 //5 Face
                         -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0
                         -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11
 
-                        0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5 //6 Face!
+                        0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5 //6 Face
                         scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3
                         (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8
 
-                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //7 Face!
+                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //7 Face
                         scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1
                         0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6
 
-                        scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3 //8 Face!
+                        scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3 //8 Face
                         0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7
                         (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10
 
-                        (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8 //9 Face!
+                        (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8 //9 Face
                         0.0f, (goldenRatio * scaleFactor), scaleFactor, //4
                         0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5
 
-                        (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10 //10 Face!
+                        (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10 //10 Face
                         0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7
                         0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6
 
-                        0.0f, (goldenRatio * scaleFactor), scaleFactor, //4  //11 Face!
+                        0.0f, (goldenRatio * scaleFactor), scaleFactor, //4  //11 Face
                         -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9
                         0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5
 
-                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //12 Face!
+                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //12 Face
                         -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11
                         0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6
 
-                        0.0f, (goldenRatio * scaleFactor), scaleFactor, //4 //13 Face!
+                        0.0f, (goldenRatio * scaleFactor), scaleFactor, //4 //13 Face
                         -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0
                         -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9
 
-                        -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2 //14 Face!
+                        -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2 //14 Face
                         scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3
                         0.0f, (goldenRatio * scaleFactor), -scaleFactor, //5
 
-                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //15 Face!
+                        -scaleFactor, 0.0f, (goldenRatio * scaleFactor), //0 //15 Face
                         0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6
                         -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11
 
-                        scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3 //16 Face!
+                        scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3 //16 Face
                         (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10
                         (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8
 
-                        0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6 //17 Face!
+                        0.0f, -(goldenRatio * scaleFactor), scaleFactor, //6 //17 Face
                         scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1
                         (goldenRatio * scaleFactor), -scaleFactor, 0.0f, //10
 
-                        -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11 //18 Face!
+                        -(goldenRatio * scaleFactor), -scaleFactor, 0.0f, //11 //18 Face
                         -scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //2
                         -(goldenRatio * scaleFactor), scaleFactor, 0.0f, //9
 
-                        scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1 //19 Face!
+                        scaleFactor, 0.0f, (goldenRatio * scaleFactor), //1 //19 Face
                         0.0f, (goldenRatio * scaleFactor), scaleFactor, //4
                         (goldenRatio * scaleFactor), scaleFactor, 0.0f, //8
 
-                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //20 Face!
+                        0.0f, -(goldenRatio * scaleFactor), -scaleFactor, //7 //20 Face
                         scaleFactor, 0.0f, -(goldenRatio * scaleFactor), //3
                         -scaleFactor, 0.0f, -(goldenRatio * scaleFactor) //2
                 };
