@@ -6,42 +6,8 @@
     android:layout_height="match_parent"
     tools:context="edu.okami.m.dicebuilder.textureActivity"
     android:weightSum="1"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:id="@+id/textureLayout">
 
-    <com.lyft.android.scissors.CropView
-        android:id="@+id/crop_view"
-        android:layout_width="366dp"
-        android:layout_height="239dp"
-        app:cropviewViewportRatio="1"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        android:layout_weight="0.58" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Image" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="crop" />
-
-    <TextView
-        android:id="@+id/countView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.38"
-        android:text="0/6 images selected"
-        android:textAlignment="center"
-        android:textSize="30sp" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back to Main" />
 
 </LinearLayout>
