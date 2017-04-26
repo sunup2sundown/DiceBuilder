@@ -174,13 +174,10 @@ public class LoginActivity extends AppCompatActivity
                             if(!task.isSuccessful()){
                                 Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                             } else{
-                                FirebaseUser mUser = mAuth.getCurrentUser();
 
-                                writeNewUser(mUser.getUid(), username, email);
+                                writeNewUser(mAuth.getCurrentUser().getUid(), username, email);
                                 //Go to Home Activity
                                 Intent diceRollIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-                                diceRollIntent.putExtra("email",email);
-                                diceRollIntent.putExtra("username", username);
                                 startActivity(diceRollIntent);
                             }
                         }
@@ -199,9 +196,9 @@ public class LoginActivity extends AppCompatActivity
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                         } else{
                             //Go to home activity
-                            Intent diceRollIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-                            diceRollIntent.putExtra("email",email);
-                            startActivity(diceRollIntent);
+                            Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
+                            //i.putExtra("user",userna);
+                            startActivity(i);
                         }
                     }
                 });

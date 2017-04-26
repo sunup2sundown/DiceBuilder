@@ -80,6 +80,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             fos = new FileOutputStream(myPath);
             // Use the compress method on the BitMap object to write image to the OutputStream
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            saveToFirebase(boxName, image);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -90,8 +91,14 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             }
         }
         return myPath.getAbsolutePath();
+    }
 
-
+    private void saveToFirebase(String name, Bitmap image){
+        //TODO: Get Image and Name as argument
+        //TODO: Open up storage instance and send to storage
+        //TODO: Get download link for image in storage
+        //TODO: Use Userid to get database reference to user's images
+        //TODO: Store the name and download link in user's images in database
     }
 }
 
