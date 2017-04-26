@@ -1,6 +1,7 @@
 package edu.okami.m.dicebuilder;
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,13 +12,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import edu.okami.m.dicebuilder.Handlers.Http;
+
 public class DiceRollActivity extends AppCompatActivity {
+
+    private final String TAG = "DiceRollActivity";
 
     CustomDie customDie;
 
@@ -25,6 +37,8 @@ public class DiceRollActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_roll);
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
 
         //Test Code
         Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
@@ -34,6 +48,14 @@ public class DiceRollActivity extends AppCompatActivity {
         Log.d("Image path", internalPath);
 
         customDie = new CustomDie(internalPath, getApplicationContext());
+
+        Button btn = (Button)findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Http().send_msg();
+            }
+        });
 
     }
 

@@ -8,16 +8,24 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.provider.FirebaseInitProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +37,12 @@ import edu.okami.m.dicebuilder.Dialogs.RegisterDialog;
 
 public class LoginActivity extends AppCompatActivity
         implements RegisterDialog.RegisterDialogListener, LoginDialog.LoginDialogListener{
+    private final String TAG = "LoginActivity";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private DatabaseReference userDbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,8 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
+        userDbReference = FirebaseDatabase.getInstance().getReference();
+
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener(){
             @Override
@@ -113,11 +126,17 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void onRegisterPositiveClick(DialogFragment dialog){
         //Get String Text from EditText fields
-        String email = ((EditText)dialog.getDialog().findViewById(R.id.register_dialog_username)).getText().toString();
+        String username = ((EditText)dialog.getDialog().findViewById(R.id.register_dialog_username)).getText().toString();
+        String email = ((EditText)dialog.getDialog().findViewById(R.id.register_dialog_email)).getText().toString();
         String password = ((EditText)dialog.getDialog().findViewById(R.id.register_dialog_password)).getText().toString();
         String confirmPassword = ((EditText)dialog.getDialog().findViewById(R.id.register_dialog_confirm)).getText().toString();
 
-        registerUser(email, password, confirmPassword);
+        if(username.contains("@")){
+            Toast.makeText(this, "Usernames can only have alphanumeric characters", Toast.LENGTH_SHORT).show();
+        } else {
+            registerUser(username, email, password, confirmPassword);
+        }
+
     }
 
     @Override
@@ -129,10 +148,16 @@ public class LoginActivity extends AppCompatActivity
      */
     @Override
     public void onLoginPositiveClick(DialogFragment dialog){
-        String email = ((EditText)dialog.getDialog().findViewById(R.id.login_dialog_username)).getText().toString();
+        String usernameEmail = ((EditText)dialog.getDialog().findViewById(R.id.login_dialog_username)).getText().toString();
         String password = ((EditText)dialog.getDialog().findViewById(R.id.login_dialog_password)).getText().toString();
 
-        loginUser(email, password);
+        int atIndex = usernameEmail.indexOf("@");
+        if(atIndex != -1){
+            loginUser(usernameEmail, password);
+        } else{
+            loginWithUsername(usernameEmail, password);
+        }
+
     }
 
     @Override
@@ -140,7 +165,7 @@ public class LoginActivity extends AppCompatActivity
         dialog.getDialog().cancel();
     }
 
-    private void registerUser(String email, String password, String confirmPassword){
+    private void registerUser(final String username, final String email, String password, String confirmPassword){
         if(password.contentEquals(confirmPassword)){
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -149,17 +174,13 @@ public class LoginActivity extends AppCompatActivity
                             if(!task.isSuccessful()){
                                 Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                             } else{
-                                /*
-                                JSONObject json = new JSONObject();
-                                try{
-                                    json.put("username", email);
-                                   // json.put("token",);
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                                */
+                                FirebaseUser mUser = mAuth.getCurrentUser();
+
+                                writeNewUser(mUser.getUid(), username, email);
                                 //Go to Home Activity
-                                Intent diceRollIntent = new Intent(getApplicationContext(), DiceRollActivity.class);
+                                Intent diceRollIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                diceRollIntent.putExtra("email",email);
+                                diceRollIntent.putExtra("username", username);
                                 startActivity(diceRollIntent);
                             }
                         }
@@ -169,7 +190,7 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-    private void loginUser(String email, String password){
+    private void loginUser(final String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -178,30 +199,66 @@ public class LoginActivity extends AppCompatActivity
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                         } else{
                             //Go to home activity
-                            Intent diceRollIntent = new Intent(getApplicationContext(), DiceRollActivity.class);
+                            Intent diceRollIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                            diceRollIntent.putExtra("email",email);
                             startActivity(diceRollIntent);
                         }
                     }
                 });
     }
 
-    private class RegisterUser extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
 
-        @Override
-        protected Void doInBackground(Void...args){
+    private void writeNewUser(String userId, String username, String email){
+        //userDbReference.child("users").child("details").push().setValue(userId);
+        //userDbReference.child("users").child("details").setValue(userId);
+        userDbReference.child("users").child("details").child(userId).setValue("email");
+        userDbReference.child("users").child("details").child(userId).setValue("username");
+        userDbReference.child("users").child("details").child(userId).child("email").setValue(email);
+        userDbReference.child("users").child("details").child(userId).child("username").setValue(username);
 
-           // String resp = makePostCall("https://kamorris.com/temple/fcmhelper/register.php", jsonObject);
+        //userDbReference.child("users").child("usernames").push().setValue(username);
+        userDbReference.child("users").child("usernames").child(username).setValue(userId);
+    }
 
-            return null;
-        }
+    private void loginWithUsername(final String username, final String password){
+        userDbReference.child("users").child("usernames")
+            .addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot data : dataSnapshot.getChildren()){
+                        String inDatabase = data.getKey();
+                        if(inDatabase.contentEquals(username)){
+                            Log.d(TAG, "USername exists");
+                            String userId = data.getValue().toString();
+                            foundEmail(userId, password);
 
-        @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
-        }
+                            break;
+                        }
+                        else{
+                            Log.d(TAG, "Does not exist");
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d(TAG, "Cancelled. USername exists");
+                }
+            });
+    }
+
+    private void foundEmail(final String key, final String password){
+        userDbReference.child("users").child("details").child(key).child("email").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.getValue().toString();
+                loginUser(email, password);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

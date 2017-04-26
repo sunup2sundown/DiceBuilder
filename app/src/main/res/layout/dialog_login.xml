@@ -19,7 +19,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Email:"
+        android:hint="Input username or email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -30,7 +30,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:hint="Password"
+        android:hint="Input password"
         android:fontFamily="sans-serif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

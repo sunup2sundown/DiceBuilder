@@ -2,4 +2,9 @@
     <string name="app_name">DiceBuilder</string>
     <string name="title_activity_texture">textureActivity</string>
     <string name="title_activity_dice_roll">DiceRollActivity</string>
+
+    //Dashboard Gridview
+    <string name="action_settings">Settings</string>
+    //Dashboard Activity String
+    <string name ="button_create">Make a Dicebox</string>
 </resources>
