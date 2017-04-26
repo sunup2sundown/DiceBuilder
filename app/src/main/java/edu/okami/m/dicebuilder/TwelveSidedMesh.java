@@ -4,7 +4,11 @@ import android.util.Log;
 
 public class TwelveSidedMesh extends DiceMesh {
 
+    private float radius;
+
     public TwelveSidedMesh(float radius) {
+
+        this.radius = radius;
 
         /**
          Algorithm adapted from: http://userpages.umbc.edu/~squire/reference/polyhedra.shtml#dodecahedron
@@ -430,6 +434,11 @@ public class TwelveSidedMesh extends DiceMesh {
         setTextureCoordinates(textureCoordinates);
         setIndices(indices);
 
+    }
+
+    @Override
+    public float getRadius() {
+        return radius;
     }
 
 }

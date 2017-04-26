@@ -1,72 +1,94 @@
 package edu.okami.m.dicebuilder;
 
 import android.content.ContextWrapper;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.storage.FirebaseStorage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import edu.okami.m.dicebuilder.Handlers.Http;
+public class DiceRollActivity extends AppCompatActivity implements SensorEventListener, DiceRenderer.Rotatable {
 
-public class DiceRollActivity extends AppCompatActivity {
+    private CustomDie customDie;
 
-    private final String TAG = "DiceRollActivity";
+    private SensorManager sensorManager;
+    private Sensor accelerometer, magneticField;
+    private float[] accelerometerReading, magnetometerReading, orientationAngles, rotationMatrix;
 
-    CustomDie customDie;
+    private DiceRenderer diceRenderer;
+    private CustomDie[] customDice;
+    private GLSurfaceView glSurfaceView;
+
+    private DisplayMetrics displayMetrics;
+    private int screenWidth, screenHeight;
+
+    private float currentZ, lastZ, shakeAcceleration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dice_roll);
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        super.onCreate(savedInstanceState);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenHeight = displayMetrics.heightPixels;
+        screenWidth = displayMetrics.widthPixels;
+
+        accelerometerReading = new float[3];
+        magnetometerReading = new float[3];
+        orientationAngles = new float[3];
+        rotationMatrix = new float[9];
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        currentZ = 9.8f;
 
         //Test Code
         Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.drawable.six_sided_texture);
+                R.drawable.four_sided_texture);
         String internalPath = saveToInternalStorage(bitmap);
-
-        Log.d("Image path", internalPath);
 
         customDie = new CustomDie(internalPath, getApplicationContext());
 
-        Button btn = (Button)findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Http().send_msg();
-            }
-        });
+        customDice = new CustomDie[1];
+        customDice[0] = customDie;
+        //customDice[1] = customDie;
+        //customDice[2] = customDie;
+        //customDice[3] = customDie;
+        //customDice[4] = customDie;
+        diceRenderer = new DiceRenderer(customDice, this, screenWidth, screenHeight);
 
-    }
+        /**
+        //Make the Activity go full screen with no title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.getSupportActionBar().hide();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         **/
 
-    @Override
-    public void onAttachedToWindow() {
-
-        String toasty = "You made a " + Integer.toString(customDie.getNumberOfSides()) + "-sided die called " +
-                customDie.getDieName() + " in the dice box called " + customDie.getDiceBoxName() + ".";
-
-        Toast.makeText(this, toasty, Toast.LENGTH_LONG).show();
-        Log.d("Object test", toasty);
+        glSurfaceView = new GLSurfaceView(this);
+        glSurfaceView.setRenderer(diceRenderer);
+        setContentView(glSurfaceView);
 
     }
 
@@ -95,4 +117,64 @@ public class DiceRollActivity extends AppCompatActivity {
         return myPath.getAbsolutePath();
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            System.arraycopy(sensorEvent.values, 0, accelerometerReading, 0, accelerometerReading.length);
+
+        }
+        else if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+
+            System.arraycopy(sensorEvent.values, 0, magnetometerReading, 0, magnetometerReading.length);
+
+        }
+
+        lastZ = Float.valueOf(currentZ);
+        currentZ = Float.valueOf(accelerometerReading[2]);
+        shakeAcceleration = currentZ - lastZ;
+
+
+        if (shakeAcceleration >= 0.5) {
+
+            diceRenderer.getShake(shakeAcceleration);
+
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_UI);
+
+    }
+
+    @Override
+    public void onPause() {
+
+        super.onPause();
+
+        sensorManager.unregisterListener(this);
+
+    }
+
+    @Override
+    public float[] getOrientationAngles() {
+
+        SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading);
+        SensorManager.getOrientation(rotationMatrix, orientationAngles);
+
+        return orientationAngles;
+
+    }
 }

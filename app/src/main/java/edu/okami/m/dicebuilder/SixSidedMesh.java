@@ -1,8 +1,17 @@
 package edu.okami.m.dicebuilder;
 
+import android.util.Log;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class SixSidedMesh extends DiceMesh {
 
+    private float width;
+
     public SixSidedMesh(float width) {
+
+        this.width = width;
 
         float faceOneLeftBound = 0.0f;
         float faceOneRightBound = 256.0f / 1536.0f;
@@ -106,6 +115,109 @@ public class SixSidedMesh extends DiceMesh {
         setVertices(vertices);
         setTextureCoordinates(textureCoordinates);
         setIndices(indices);
+
+    }
+
+    @Override
+    public float getRadius() {
+        //return width * (float)(Math.sqrt(3)) / 2.0f;
+        return width / 2.0f;
+    }
+
+    @Override
+    public float[] getFlatteningEuelerAngles () {
+
+        float[] flatteningEulerAngles = new float[3];
+        float[][] ro = {
+
+                {0, 0, 1}, {0, -1, 0}, {1, 0, 0},
+                {-1, 0, 0}, {0, 1, 0}, {0, 0, -1}
+
+        };
+
+        float[][] Ro2w = {
+                {matrixArray[0], matrixArray[4], matrixArray[8]},
+                {matrixArray[1], matrixArray[5], matrixArray[9]},
+                {matrixArray[2], matrixArray[6], matrixArray[10]}
+        };
+
+        float[][] nw = {
+
+                {dot(Ro2w[0], ro[0]), dot(Ro2w[1], ro[0]), dot(Ro2w[2], ro[0])},
+                {dot(Ro2w[0], ro[1]), dot(Ro2w[1], ro[1]), dot(Ro2w[2], ro[1])},
+                {dot(Ro2w[0], ro[2]), dot(Ro2w[1], ro[2]), dot(Ro2w[2], ro[2])},
+                {dot(Ro2w[0], ro[3]), dot(Ro2w[1], ro[3]), dot(Ro2w[2], ro[3])},
+                {dot(Ro2w[0], ro[4]), dot(Ro2w[1], ro[4]), dot(Ro2w[2], ro[4])},
+                {dot(Ro2w[0], ro[5]), dot(Ro2w[1], ro[5]), dot(Ro2w[2], ro[5])}
+
+        };
+
+        float[] down = {0, 0, -1};
+
+        float[] signedAngles = {
+
+                (float) (Math.acos(dot(nw[0], down))),
+                (float) (Math.acos(dot(nw[1], down))),
+                (float) (Math.acos(dot(nw[2], down))),
+                (float) (Math.acos(dot(nw[3], down))),
+                (float) (Math.acos(dot(nw[4], down))),
+                (float) (Math.acos(dot(nw[5], down)))
+
+        };
+
+        float closestAngle = Float.valueOf(signedAngles[0]);
+        int closestIndex = 0;
+
+        for (int i = 1; i < signedAngles.length; i++) {
+            if (signedAngles[i] < closestAngle) {
+                closestAngle = Float.valueOf(signedAngles[i]);
+                closestIndex = i;
+            }
+        }
+
+        float[] zaxNewWInO = {-ro[closestIndex][0], -ro[closestIndex][1], -ro[closestIndex][2]};
+        float[] yaxOldWInO = Ro2w[1];
+        float[] xaxNewWInO = normalize(cross(yaxOldWInO, zaxNewWInO));
+        float[] yaxNewWInO = normalize(cross(zaxNewWInO, xaxNewWInO));
+
+        float[][] newRo2w = {xaxNewWInO, yaxNewWInO, zaxNewWInO};
+
+        if (newRo2w[1][0] > 0.998) { //singularity at north pole
+
+            flatteningEulerAngles[0] = (float) Math.atan2(newRo2w[0][2], newRo2w[2][2]);
+            flatteningEulerAngles[1] = (float) (Math.PI / 2);
+            flatteningEulerAngles[2] = 0;
+
+
+        }
+        else if (newRo2w[1][0] < -0.998) { // singularity at south pole
+
+            flatteningEulerAngles[0] = (float) Math.atan2(newRo2w[0][2], newRo2w[2][2]);
+            flatteningEulerAngles[1] = (float) - (Math.PI / 2);
+            flatteningEulerAngles[2] = 0;
+
+        }
+        else {
+
+            flatteningEulerAngles[0] = (float) Math.atan2(-newRo2w[2][0], newRo2w[0][0]);
+            flatteningEulerAngles[1] = (float) Math.asin(newRo2w[1][0]);
+            flatteningEulerAngles[2] = (float) Math.atan2(-newRo2w[1][2], newRo2w[1][1]);
+
+        }
+
+        flatteningEulerAngles[0] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[0]));
+        flatteningEulerAngles[1] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[1]));
+        flatteningEulerAngles[2] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[2]));
+
+        if (flatteningEulerAngles[0] < 0.0f) {flatteningEulerAngles[0] += 360.0f;}
+        if (flatteningEulerAngles[1] < 0.0f) {flatteningEulerAngles[1] += 360.0f;}
+        if (flatteningEulerAngles[2] < 0.0f) {flatteningEulerAngles[2] += 360.0f;}
+
+        if (flatteningEulerAngles[0] == -0.0f) {flatteningEulerAngles[0] = 0.0f;}
+        if (flatteningEulerAngles[1] == -0.0f) {flatteningEulerAngles[1] = 0.0f;}
+        if (flatteningEulerAngles[2] == -0.0f) {flatteningEulerAngles[2] = 0.0f;}
+
+        return flatteningEulerAngles;
 
     }
 
