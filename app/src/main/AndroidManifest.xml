@@ -15,15 +15,37 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DashboardActivity">
+
+        </activity>
         <activity android:name=".textureActivity" />
+        <activity android:name=".FriendsListActivity" />
+        <activity android:name=".ChatActivity" />
         <activity
             android:name=".DiceRollActivity"
             android:label="@string/title_activity_dice_roll"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name = ".DiceBoxActivity"/>
+        <service
+            android:name=".MyMessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        {% includecode github_path="firebase/quickstart-android/messaging/app/src/main/AndroidManifest.xml"
+        region_tag="fcm_default_icon" adjust_indentation="auto" github_link=True %}
     </application>
 
 </manifest>

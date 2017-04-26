@@ -8,4 +8,10 @@
     tools:context="edu.okami.m.dicebuilder.DiceRollActivity"
     tools:showIn="@layout/activity_dice_roll">
 
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="368dp"
+        android:layout_height="35dp"
+        android:text="Send a Message" />
+
 </android.support.constraint.ConstraintLayout>

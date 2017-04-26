@@ -15,12 +15,23 @@
 
     <EditText
         android:id="@+id/register_dialog_username"
+        android:inputType="textPersonName"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="Type a username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/register_dialog_email"
         android:inputType="textEmailAddress"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Email:"
+        android:hint="Type your email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -31,7 +42,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Password(6 characters):"
+        android:hint="Type a password(6 characters)"
         android:fontFamily="sans-serif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -43,7 +54,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:hint="Confirm Password"
+        android:hint="Confirm your password"
         android:fontFamily="sans-serif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
