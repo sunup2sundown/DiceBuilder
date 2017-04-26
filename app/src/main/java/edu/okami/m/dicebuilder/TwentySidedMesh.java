@@ -2,7 +2,11 @@ package edu.okami.m.dicebuilder;
 
 public class TwentySidedMesh extends DiceMesh {
 
+    private float scaleFactor;
+
     public TwentySidedMesh(float scaleFactor) {
+
+        this.scaleFactor = scaleFactor;
 
         double squareRootOfFive = Math.sqrt(5);
         float goldenRatio = (float) ((1 + squareRootOfFive)/2);
@@ -243,6 +247,11 @@ public class TwentySidedMesh extends DiceMesh {
         setTextureCoordinates(textureCoordinates);
         setIndices(indices);
 
+    }
+
+    @Override
+    public float getRadius() {
+        return scaleFactor * .05f;
     }
 
 }

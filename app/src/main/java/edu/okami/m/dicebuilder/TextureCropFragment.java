@@ -41,6 +41,8 @@ public class TextureCropFragment extends Fragment {
     CropView cropview;
     TextView imgCount;
 
+    boolean imageLoaded = false;
+
     Button selectBtn, cropBtn;
 
     private OnFragmentInteractionListener mListener;
@@ -75,24 +77,29 @@ public class TextureCropFragment extends Fragment {
                 photoIntent.setType("image/*");
                 photoIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(photoIntent, "Select Picture"), 10);
+
             }
         });
 
         cropBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bitmap croppedImage = cropview.crop();
-                Bitmap resizedImage = Bitmap.createScaledBitmap(croppedImage, 256, 256, false);
-                images[imageCount] = resizedImage;
-                imageCount++;
-                if (imageCount == sides) {
-                    Bitmap merged = merge(images, sides);
-                    Toast.makeText(activity, "Images Merged", Toast.LENGTH_SHORT).show();
-                    ((OnFragmentInteractionListener) activity).saveMergedImage(merged, diceName);
-                    ((OnFragmentInteractionListener) activity).beginShowDieFragment(diceName);
+                if (imageLoaded){
+                    Bitmap croppedImage = cropview.crop();
+                    Bitmap resizedImage = Bitmap.createScaledBitmap(croppedImage, 256, 256, false);
+                    images[imageCount] = resizedImage;
+                    imageCount++;
+                    if (imageCount == sides) {
+                        Bitmap merged = merge(images, sides);
+                        Toast.makeText(activity, "Images Merged", Toast.LENGTH_SHORT).show();
+                        ((OnFragmentInteractionListener) activity).saveMergedImage(merged, diceName);
+                        ((OnFragmentInteractionListener) activity).beginShowDieFragment(diceName);
+                    }
+                    imgCount.setText("Side " + (imageCount + 1) + "/" + sides);
                 }
-                imgCount.setText("Side " + (imageCount+1) + "/" + sides);
-
+                else{
+                    Toast.makeText(activity, "You must load an image first", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -148,6 +155,7 @@ public class TextureCropFragment extends Fragment {
 
             Uri uri = data.getData();
             try {
+                imageLoaded = true;
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
 
                 cropview.setImageBitmap(bitmap);

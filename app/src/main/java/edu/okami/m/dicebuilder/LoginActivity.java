@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent textureIntent = new Intent(getApplicationContext(), textureActivity.class);
-
+                textureIntent.putExtra("box_name", "test_box");
                 startActivity(textureIntent);
             }
         });

@@ -2,7 +2,11 @@ package edu.okami.m.dicebuilder;
 
 public class TenSidedMesh extends DiceMesh {
 
+    private float radius;
+
     public TenSidedMesh(float radius) {
+
+        this.radius = radius;
 
         double rads = (Math.PI) / 5;
 
@@ -264,6 +268,11 @@ public class TenSidedMesh extends DiceMesh {
         setTextureCoordinates(textureCoordinates);
         setIndices(indices);
 
+    }
+
+    @Override
+    public float getRadius() {
+        return radius;
     }
 
 }

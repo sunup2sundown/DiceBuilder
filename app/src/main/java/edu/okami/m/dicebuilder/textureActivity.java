@@ -73,7 +73,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
 
         File directory = cw.getDir(boxName, getApplicationContext().MODE_PRIVATE);
 
-        File myPath = new File(directory, diceName);
+        File myPath=new File(directory, diceName);
 
         FileOutputStream fos = null;
         try {
@@ -90,6 +90,8 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
                 e.printStackTrace();
             }
         }
+
+        Log.d("Path", myPath.getAbsolutePath());
         return myPath.getAbsolutePath();
     }
 

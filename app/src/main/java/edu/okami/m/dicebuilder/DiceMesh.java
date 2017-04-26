@@ -2,13 +2,19 @@ package edu.okami.m.dicebuilder;
 
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
+import android.renderscript.Matrix4f;
+import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
+import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class DiceMesh {
 
@@ -26,7 +32,17 @@ public class DiceMesh {
     public float rotateY = 0;
     public float rotateZ = 0;
 
+    public float theta = 0;
+    public float rotateVelocityX = 0;
+    public float rotateVelocityY = 0;
+
+    protected float[] matrixArray = new float[16];
+
+    //private float changingTheta = 0;
+
     public void draw(GL10 gl) {
+
+        GL11 gl11 = (GL11) gl;
 
         // Counter-clockwise winding
         gl.glFrontFace(GL10.GL_CCW);
@@ -53,9 +69,25 @@ public class DiceMesh {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
         gl.glTranslatef(translateX, translateY, translateZ);
-        gl.glRotatef(rotateX, 1, 0, 0);
+        gl.glRotatef(theta, -rotateVelocityY, rotateVelocityX, 0);
+
+        //Order needed to correspond with Eueler Angle function
         gl.glRotatef(rotateY, 0, 1, 0);
         gl.glRotatef(rotateZ, 0, 0, 1);
+        gl.glRotatef(rotateX, 1, 0, 0);
+
+        gl11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, matrixArray, 0);
+
+        /**
+         //Test Area
+        float[] testVelocity = {3.0f, 5.0f, 0.0f};
+        changingTheta++;
+        gl.glRotatef(changingTheta, -testVelocity[1], testVelocity[0], 1);
+
+        if (changingTheta < 20) {Log.d("Print the array", Arrays.toString(array));}
+
+        //Test Area
+         **/
 
         gl.glDrawElements(GL10.GL_TRIANGLES, numberOfIndices, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
@@ -67,6 +99,7 @@ public class DiceMesh {
 
         gl.glDisable(GL10.GL_CULL_FACE);
         gl.glDisable(GL10.GL_TEXTURE_2D);
+
         gl.glLoadIdentity();
 
     }
@@ -125,11 +158,114 @@ public class DiceMesh {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
-        //gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-        //gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0);
         mBitmap.recycle();
+
+    }
+
+    public float getRadius() {
+        return 0.0f;
+    }
+
+    public float[] getEulerAngles() {
+
+        //Adapted from algorithm at http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToEuler/
+
+        float[] eulerAngles = new float[3];
+
+        if (matrixArray[1] > 0.998) { //singularity at north pole
+
+            eulerAngles[0] = (float) Math.atan2(matrixArray[8], matrixArray[10]);
+            eulerAngles[1] = (float) (Math.PI / 2);
+            eulerAngles[2] = 0;
+
+
+        }
+        else if (matrixArray[1] < -0.998) { // singularity at south pole
+
+            eulerAngles[0] = (float) Math.atan2(matrixArray[8], matrixArray[10]);
+            eulerAngles[1] = (float) - (Math.PI / 2);
+            eulerAngles[2] = 0;
+
+        }
+        else {
+
+            eulerAngles[0] = (float) Math.atan2(-matrixArray[2], matrixArray[0]);
+            eulerAngles[1] = (float) Math.asin(matrixArray[1]);
+            eulerAngles[2] = (float) Math.atan2(-matrixArray[9], matrixArray[5]);
+
+        }
+
+        eulerAngles[0] = (float) Math.rint(Math.toDegrees(eulerAngles[0]));
+        eulerAngles[1] = (float) Math.rint(Math.toDegrees(eulerAngles[1]));
+        eulerAngles[2] = (float) Math.rint(Math.toDegrees(eulerAngles[2]));
+
+        //This triumvirate is experimental
+        if (eulerAngles[0] < 0.0f) {eulerAngles[0] += 360.0f;}
+        if (eulerAngles[1] < 0.0f) {eulerAngles[1] += 360.0f;}
+        if (eulerAngles[2] < 0.0f) {eulerAngles[2] += 360.0f;}
+
+        if (eulerAngles[0] == -0.0f) {eulerAngles[0] = 0.0f;}
+        if (eulerAngles[1] == -0.0f) {eulerAngles[1] = 0.0f;}
+        if (eulerAngles[2] == -0.0f) {eulerAngles[2] = 0.0f;}
+
+        return eulerAngles;
+
+    }
+
+    public float[] getFlatteningEuelerAngles () {
+
+        return null;
+
+    }
+
+    protected float dot(float[] a, float[] b) {
+
+        float dotProduct = 0;
+
+        for (int i = 0; i < a.length; i++) {
+            dotProduct += (a[i] * b[i]);
+        }
+
+        return dotProduct;
+
+    }
+
+    protected float[] cross(float[] a, float[] b) {
+
+        float crossProduct[] = new float[3];
+
+        crossProduct[0] = a[1] * b[2] - b[1] * a[2];
+        crossProduct[1] = b[0] * a[2] - a[0] * b[2];
+        crossProduct[2] = a[0] * b[1] - b[0] * a[1];
+
+        /**
+        if ((crossProduct[0] == 0) && (crossProduct[1] == 0) && (crossProduct[2]== 0)) {
+            return a;
+        }
+        else {
+            return crossProduct;
+        }
+         **/
+
+        return crossProduct;
+
+    }
+
+    protected float[] normalize(float[] vector) {
+
+        float magnitude = (float) (Math.sqrt(
+
+                (vector[0] * vector[0]) + (vector[1] * vector[1]) + (vector[2] * vector[2])
+
+        ));
+
+        float[] normalizedVector = new float[3];
+        normalizedVector[0] = vector[0] / magnitude;
+        normalizedVector[1] = vector[1] / magnitude;
+        normalizedVector[2] = vector[2] / magnitude;
+
+        return normalizedVector;
 
     }
 
