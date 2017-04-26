@@ -71,12 +71,9 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
     public String saveMergedImage(Bitmap image, String diceName) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
 
-        File directory = cw.getDir("home", getApplicationContext().MODE_PRIVATE);
-        File homeDirectory = new File(directory, "diceboxes");
-        homeDirectory.mkdir();
-        File diceBoxDir = new File(homeDirectory, boxName);
-        diceBoxDir.mkdir();
-        File myPath = new File(diceBoxDir, diceName);
+        File directory = cw.getDir(boxName, getApplicationContext().MODE_PRIVATE);
+
+        File myPath=new File(directory, diceName);
 
         FileOutputStream fos = null;
         try {
