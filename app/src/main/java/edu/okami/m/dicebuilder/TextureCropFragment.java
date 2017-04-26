@@ -66,7 +66,7 @@ public class TextureCropFragment extends Fragment {
         cropview = (CropView) v.findViewById(R.id.cropview_fragment);
         overlay = (ImageView)v.findViewById(R.id.imageview_fragment);
         imgCount = (TextView)v.findViewById(R.id.tv_count);
-        imgCount.setText("Image 0/" + sides);
+        imgCount.setText("Side 1/" + sides);
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,12 +85,13 @@ public class TextureCropFragment extends Fragment {
                 Bitmap resizedImage = Bitmap.createScaledBitmap(croppedImage, 256, 256, false);
                 images[imageCount] = resizedImage;
                 imageCount++;
-                imgCount.setText("Image " + imageCount + "/" + sides);
                 if (imageCount == sides) {
                     Bitmap merged = merge(images, sides);
                     Toast.makeText(activity, "Images Merged", Toast.LENGTH_SHORT).show();
-                    //((OnFragmentInteractionListener) activity).saveMergedImage(merged, diceName, "box_here");
+                    ((OnFragmentInteractionListener) activity).saveMergedImage(merged, diceName);
+                    ((OnFragmentInteractionListener) activity).beginShowDieFragment(diceName);
                 }
+                imgCount.setText("Side " + (imageCount+1) + "/" + sides);
 
             }
         });
@@ -172,7 +173,7 @@ public class TextureCropFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
-        public String saveMergedImage(Bitmap image, String diceName, String boxName);
+        public void beginShowDieFragment(String diceName);
+        public String saveMergedImage(Bitmap image, String diceName);
     }
 }
