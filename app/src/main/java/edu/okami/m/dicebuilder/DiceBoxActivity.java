@@ -57,12 +57,13 @@ public class DiceBoxActivity extends AppCompatActivity
         boxName = i.getStringExtra("BoxName");
         userId = i.getStringExtra("UserID");
 
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
+
         Toolbar diceboxToolbar = (Toolbar)findViewById(R.id.dicebox_toolbar);
         setSupportActionBar(diceboxToolbar);
         getSupportActionBar().setTitle(boxName);
 
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
         boxDirectory = new File(directory, boxName);
 
         if(!boxDirectory.exists()){
