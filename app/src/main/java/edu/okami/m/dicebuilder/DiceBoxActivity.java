@@ -132,7 +132,7 @@ public class DiceBoxActivity extends AppCompatActivity
     }
 
     private ArrayList<GridItem> populateGridWithDice(){
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.boba_fett);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ten_sided_shape);
         ArrayList<GridItem> arrayOfGridItems = new ArrayList<GridItem>();
         ArrayList<String> arrayOfFiles = getFileNames(boxDirectory.listFiles());
 

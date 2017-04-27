@@ -275,7 +275,7 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private ArrayList<GridItem> populateGridView(){
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bb);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ten_sided_shape);
         ArrayList<GridItem> arrayOfGridItems = new ArrayList<GridItem>();
         ArrayList<String> arrayList = getFileNames(userDirectory.listFiles());
 

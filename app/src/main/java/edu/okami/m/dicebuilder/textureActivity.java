@@ -22,7 +22,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
     TextureShowDieFragment showDieFragment;
 
     String boxName = "default";
-    private String userId;
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +73,9 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
     @Override
     public String saveMergedImage(Bitmap image, String diceName) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
 
-        File directory = cw.getDir(boxName, getApplicationContext().MODE_PRIVATE);
-
-        File myPath=new File(directory, diceName);
-
+        File myPath=new File(directory, boxName);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
@@ -95,6 +93,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         }
 
         Log.d("Path", myPath.getAbsolutePath());
+
         return myPath.getAbsolutePath();
     }
 
