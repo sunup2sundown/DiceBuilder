@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.AdapterView.OnItemClickListener;
@@ -68,6 +71,10 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        Toolbar dashboardToolbar = (Toolbar)findViewById(R.id.dashboard_toolbar);
+        setSupportActionBar(dashboardToolbar);
+        getSupportActionBar().setTitle("Dashboard");
+
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
 
         userDirectory = new File(getFilesDir(), userId);
@@ -113,6 +120,14 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                GridItem item = (GridItem)parent.getItemAtPosition(position);
+                return false;
+            }
+        });
+
         button = (Button)findViewById(R.id.button_dashboard_create);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +136,26 @@ public class DashboardActivity extends AppCompatActivity
                 register.show(getSupportFragmentManager(), "CreateDiceboxDialog");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        //Inflate menu
+        getMenuInflater().inflate(R.menu.dashboard_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        //Handle Tool bar item clicks
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_add_dicebox:
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

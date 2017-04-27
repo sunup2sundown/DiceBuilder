@@ -7,8 +7,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowId;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +25,7 @@ import edu.okami.m.dicebuilder.Adapters.GridAdapter;
 import edu.okami.m.dicebuilder.Dialogs.CreateDiceDialog;
 import edu.okami.m.dicebuilder.Dialogs.NoDiceDialog;
 import edu.okami.m.dicebuilder.Dialogs.NoDiceboxDialog;
+import edu.okami.m.dicebuilder.Objects.DiceItem;
 import edu.okami.m.dicebuilder.Objects.GridItem;
 
 /**
@@ -30,11 +35,14 @@ import edu.okami.m.dicebuilder.Objects.GridItem;
 public class DiceBoxActivity extends AppCompatActivity
         implements NoDiceDialog.NoDiceDialogListener, CreateDiceDialog.CreateDiceDialogListener{
     private final String TAG = "DiceBoxActivity";
+    private final int MAX_DICE = 5;
 
     private String boxName;
     private String userId;
 
     private File boxDirectory;
+
+    private ArrayList<CustomDie> passDiceToRoll = new ArrayList<CustomDie>();
 
     private Button button;
     private GridView gridView;
@@ -50,6 +58,9 @@ public class DiceBoxActivity extends AppCompatActivity
         String file = userId + "\\" + boxName;
         Log.d(TAG, file);
 
+        Toolbar diceboxToolbar = (Toolbar)findViewById(R.id.dicebox_toolbar);
+        setSupportActionBar(diceboxToolbar);
+        getSupportActionBar().setTitle(boxName);
 
         boxDirectory = new File(getFilesDir(),file);
         boxDirectory = getDir(file, Context.MODE_PRIVATE);
@@ -75,7 +86,10 @@ public class DiceBoxActivity extends AppCompatActivity
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //GridItem item = (GridItem)parent.getItemAtPosition(position);
+                DiceItem item = (DiceItem)parent.getItemAtPosition(position);
+                CustomDie die = (CustomDie)item.getCustomDie();
+
+                passDiceToRoll.add(die);
             }
         });
 
@@ -93,6 +107,26 @@ public class DiceBoxActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        //Inflate menu
+        getMenuInflater().inflate(R.menu.dicebox_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        //Handle Tool bar item clicks
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_add_dice:
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /*
@@ -131,17 +165,20 @@ public class DiceBoxActivity extends AppCompatActivity
         dialog.getDialog().cancel();
     }
 
-    private ArrayList<GridItem> populateGridWithDice(){
+    private ArrayList<DiceItem> populateGridWithDice(){
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.boba_fett);
-        ArrayList<GridItem> arrayOfGridItems = new ArrayList<GridItem>();
+        ArrayList<DiceItem> arrayOfDiceItems = new ArrayList<DiceItem>();
         ArrayList<String> arrayOfFiles = getFileNames(boxDirectory.listFiles());
 
         for(int i = 0; i < arrayOfFiles.size(); i++){
-            GridItem tempGI = new GridItem(bitmap, arrayOfFiles.get(i));
-            arrayOfGridItems.add(tempGI);
+            String path = boxDirectory.getPath().concat(arrayOfFiles.get(i));
+            CustomDie cd = new CustomDie(path, getApplicationContext());
+
+            DiceItem tempDI = new DiceItem(bitmap, arrayOfFiles.get(i), cd);
+            arrayOfDiceItems.add(tempDI);
         }
 
-        return arrayOfGridItems;
+        return arrayOfDiceItems;
     }
     private ArrayList<String> getFileNames(File[] files){
         ArrayList<String> arrayListFiles = new ArrayList<String>();
