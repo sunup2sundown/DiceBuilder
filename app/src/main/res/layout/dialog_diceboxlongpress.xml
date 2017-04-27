@@ -3,4 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/dicebox_longpress_share"
+        android:text="Share a Dicebox with a Friend"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:textIsSelectable="true"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
+    <TextView
+        android:id="@+id/dicebox_longpress_delete"
+        android:text="Delete Dicebox"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:textAlignment="center"
+        android:textIsSelectable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

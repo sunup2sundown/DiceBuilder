@@ -1,6 +1,9 @@
 package edu.okami.m.dicebuilder;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -124,7 +128,9 @@ public class DashboardActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 GridItem item = (GridItem)parent.getItemAtPosition(position);
-                return false;
+
+
+                return true;
             }
         });
 
@@ -193,6 +199,7 @@ public class DashboardActivity extends AppCompatActivity
         }
 
     }
+
 
     /*
     * No Dice Box Dialog Implementation

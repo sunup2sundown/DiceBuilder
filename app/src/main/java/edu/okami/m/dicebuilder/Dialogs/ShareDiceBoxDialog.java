@@ -52,14 +52,14 @@ public class ShareDiceBoxDialog extends DialogFragment {
 
         //Inflate dialog with Custom Layout
         //Null for parent view
-        builder.setView(inflater.inflate(R.layout.dialog_sharedicebox, null))
-                .setPositiveButton("Share", new DialogInterface.OnClickListener(){
+        builder.setView(inflater.inflate(R.layout.dialog_nodice, null))
+                .setPositiveButton("Create a dice", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
                         mListener.onShareDiceBoxPositiveClick(ShareDiceBoxDialog.this);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                .setNegativeButton("Not now", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //send the negative button event back to host activity
                         mListener.onShareDiceBoxNegativeClick(ShareDiceBoxDialog.this);

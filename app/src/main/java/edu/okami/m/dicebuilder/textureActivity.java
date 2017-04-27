@@ -17,6 +17,8 @@ import java.io.IOException;
 public class textureActivity extends AppCompatActivity implements TextureCropFragment.OnFragmentInteractionListener,
         TextureMenuFragment.OnFragmentInteractionListener, TextureShowDieFragment.OnFragmentInteractionListener {
 
+    private final String TAG = "TextureActivity";
+
     TextureCropFragment cropFragment;
     TextureMenuFragment menuFragment;
     TextureShowDieFragment showDieFragment;
@@ -39,6 +41,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             Log.d("Box name passed", "no");
         }
 
+        Log.d(TAG, userId);
 
         cropFragment = new TextureCropFragment();
         menuFragment = new TextureMenuFragment();

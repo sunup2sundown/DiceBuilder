@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import edu.okami.m.dicebuilder.Objects.GridItem;
  */
 
 public class DiceBoxActivity extends AppCompatActivity
-        implements NoDiceDialog.NoDiceDialogListener, CreateDiceDialog.CreateDiceDialogListener{
+        implements NoDiceDialog.NoDiceDialogListener, CreateDiceDialog.CreateDiceDialogListener {
     private final String TAG = "DiceBoxActivity";
     private final int MAX_DICE = 5;
 
