@@ -88,6 +88,8 @@ public class DiceBoxActivity extends AppCompatActivity
                 register.show(getSupportFragmentManager(), "CreateDiceDialog");
                 */
                 Intent i = new Intent(getApplicationContext(), textureActivity.class);
+                i.putExtra("BoxName", boxName);
+                i.putExtra("UserID", userId);
                 startActivity(i);
             }
         });

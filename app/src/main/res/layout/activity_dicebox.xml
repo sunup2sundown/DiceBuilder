@@ -17,6 +17,7 @@
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
+        android:listSelector="@drawable/dice_selector"
         />
     <Button
         android:background="@drawable/dashboard_button"

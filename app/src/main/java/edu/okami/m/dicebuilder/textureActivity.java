@@ -22,6 +22,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
     TextureShowDieFragment showDieFragment;
 
     String boxName = "default";
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
 
         try{
             boxName = getIntent().getStringExtra("box_name");
+            //boxName = getIntent().getStringExtra("BoxName");
+            userId = getIntent().getStringExtra("UserID");
             Log.d("box name", getIntent().getStringExtra("box_name"));
         } catch(Exception e){
             e.printStackTrace();
