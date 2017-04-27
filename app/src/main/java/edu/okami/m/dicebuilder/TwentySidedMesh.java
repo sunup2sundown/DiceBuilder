@@ -3,6 +3,7 @@ package edu.okami.m.dicebuilder;
 public class TwentySidedMesh extends DiceMesh {
 
     private float scaleFactor;
+    private float[][] ro;
 
     public TwentySidedMesh(float scaleFactor) {
 
@@ -136,6 +137,117 @@ public class TwentySidedMesh extends DiceMesh {
                         -scaleFactor, 0.0f, -(goldenRatio * scaleFactor) //2
                 };
 
+        float[][] centroids = {
+
+                {((vertices[0] + vertices[3] + vertices[6]) / 3), //1
+                        ((vertices[1] + vertices[4] + vertices[7]) / 3),
+                        ((vertices[2] + vertices[5] + vertices[8]) / 3)},
+
+                {((vertices[9] + vertices[12] + vertices[15]) / 3), //2
+                        ((vertices[10] + vertices[13] + vertices[16]) / 3),
+                        ((vertices[11] + vertices[14] + vertices[17]) / 3)},
+
+                {((vertices[18] + vertices[21] + vertices[24]) / 3), //3
+                        ((vertices[19] + vertices[22] + vertices[25]) / 3),
+                        ((vertices[20] + vertices[23] + vertices[26]) / 3)},
+
+                {((vertices[27] + vertices[30] + vertices[33]) / 3), //4
+                        ((vertices[28] + vertices[31] + vertices[34]) / 3),
+                        ((vertices[29] + vertices[32] + vertices[35]) / 3)},
+
+                {((vertices[36] + vertices[39] + vertices[42]) / 3), //5
+                        ((vertices[37] + vertices[40] + vertices[43]) / 3),
+                        ((vertices[38] + vertices[41] + vertices[44]) / 3)},
+
+                {((vertices[45] + vertices[48] + vertices[51]) / 3), //6
+                        ((vertices[46] + vertices[49] + vertices[52]) / 3),
+                        ((vertices[47] + vertices[50] + vertices[53]) / 3)},
+
+                {((vertices[54] + vertices[57] + vertices[60]) / 3), //7
+                        ((vertices[55] + vertices[58] + vertices[61]) / 3),
+                        ((vertices[56] + vertices[59] + vertices[62]) / 3)},
+
+                {((vertices[63] + vertices[66] + vertices[69]) / 3), //8
+                        ((vertices[64] + vertices[67] + vertices[70]) / 3),
+                        ((vertices[65] + vertices[68] + vertices[71]) / 3)},
+
+                {((vertices[72] + vertices[75] + vertices[78]) / 3), //9
+                        ((vertices[73] + vertices[76] + vertices[79]) / 3),
+                        ((vertices[74] + vertices[77] + vertices[80]) / 3)},
+
+                {((vertices[81] + vertices[84] + vertices[87]) / 3), //10
+                        ((vertices[82] + vertices[85] + vertices[88]) / 3),
+                        ((vertices[83] + vertices[86] + vertices[89]) / 3)},
+
+                {((vertices[90] + vertices[93] + vertices[96]) / 3), //11
+                        ((vertices[91] + vertices[94] + vertices[97]) / 3),
+                        ((vertices[92] + vertices[95] + vertices[98]) / 3)},
+
+                {((vertices[99] + vertices[102] + vertices[105]) / 3), //12
+                        ((vertices[100] + vertices[103] + vertices[106]) / 3),
+                        ((vertices[101] + vertices[104] + vertices[107]) / 3)},
+
+                {((vertices[108] + vertices[111] + vertices[114]) / 3), //13
+                        ((vertices[109] + vertices[112] + vertices[115]) / 3),
+                        ((vertices[110] + vertices[113] + vertices[116]) / 3)},
+
+                {((vertices[117] + vertices[120] + vertices[123]) / 3), //14
+                        ((vertices[118] + vertices[121] + vertices[124]) / 3),
+                        ((vertices[119] + vertices[122] + vertices[125]) / 3)},
+
+                {((vertices[126] + vertices[129] + vertices[132]) / 3), //15
+                        ((vertices[127] + vertices[130] + vertices[133]) / 3),
+                        ((vertices[128] + vertices[131] + vertices[134]) / 3)},
+
+                {((vertices[135] + vertices[138] + vertices[141]) / 3), //16
+                        ((vertices[136] + vertices[139] + vertices[142]) / 3),
+                        ((vertices[137] + vertices[140] + vertices[143]) / 3)},
+
+                {((vertices[144] + vertices[147] + vertices[150]) / 3), //17
+                        ((vertices[145] + vertices[148] + vertices[151]) / 3),
+                        ((vertices[146] + vertices[149] + vertices[152]) / 3)},
+
+                {((vertices[153] + vertices[156] + vertices[159]) / 3), //18
+                        ((vertices[154] + vertices[157] + vertices[160]) / 3),
+                        ((vertices[155] + vertices[158] + vertices[161]) / 3)},
+
+                {((vertices[162] + vertices[165] + vertices[168]) / 3), //19
+                        ((vertices[163] + vertices[166] + vertices[169]) / 3),
+                        ((vertices[164] + vertices[167] + vertices[170]) / 3)},
+
+                {((vertices[171] + vertices[174] + vertices[177]) / 3), //20
+                        ((vertices[172] + vertices[175] + vertices[178]) / 3),
+                        ((vertices[173] + vertices[176] + vertices[179]) / 3)}
+
+        };
+
+        float[][] ro = {
+
+                normalize(centroids[0]),
+                normalize(centroids[1]),
+                normalize(centroids[2]),
+                normalize(centroids[3]),
+                normalize(centroids[4]),
+                normalize(centroids[5]),
+                normalize(centroids[6]),
+                normalize(centroids[7]),
+                normalize(centroids[8]),
+                normalize(centroids[9]),
+                normalize(centroids[10]),
+                normalize(centroids[11]),
+                normalize(centroids[12]),
+                normalize(centroids[13]),
+                normalize(centroids[14]),
+                normalize(centroids[15]),
+                normalize(centroids[16]),
+                normalize(centroids[17]),
+                normalize(centroids[18]),
+                normalize(centroids[19])
+
+        };
+
+        this.ro = ro;
+
         short indices[] =
                 {
                         0, 1, 2,
@@ -251,7 +363,126 @@ public class TwentySidedMesh extends DiceMesh {
 
     @Override
     public float getRadius() {
-        return scaleFactor * .05f;
+        return scaleFactor * 1.5f;
+    }
+
+    @Override
+    public float[] getFlatteningEuelerAngles () {
+
+        float[] flatteningEulerAngles = new float[3];
+
+        float[][] Ro2w = {
+                {matrixArray[0], matrixArray[4], matrixArray[8]},
+                {matrixArray[1], matrixArray[5], matrixArray[9]},
+                {matrixArray[2], matrixArray[6], matrixArray[10]}
+        };
+
+        float[][] nw = {
+
+                {dot(Ro2w[0], ro[0]), dot(Ro2w[1], ro[0]), dot(Ro2w[2], ro[0])},
+                {dot(Ro2w[0], ro[1]), dot(Ro2w[1], ro[1]), dot(Ro2w[2], ro[1])},
+                {dot(Ro2w[0], ro[2]), dot(Ro2w[1], ro[2]), dot(Ro2w[2], ro[2])},
+                {dot(Ro2w[0], ro[3]), dot(Ro2w[1], ro[3]), dot(Ro2w[2], ro[3])},
+                {dot(Ro2w[0], ro[4]), dot(Ro2w[1], ro[4]), dot(Ro2w[2], ro[4])},
+                {dot(Ro2w[0], ro[5]), dot(Ro2w[1], ro[5]), dot(Ro2w[2], ro[5])},
+                {dot(Ro2w[0], ro[6]), dot(Ro2w[1], ro[6]), dot(Ro2w[2], ro[6])},
+                {dot(Ro2w[0], ro[7]), dot(Ro2w[1], ro[7]), dot(Ro2w[2], ro[7])},
+                {dot(Ro2w[0], ro[8]), dot(Ro2w[1], ro[8]), dot(Ro2w[2], ro[8])},
+                {dot(Ro2w[0], ro[9]), dot(Ro2w[1], ro[9]), dot(Ro2w[2], ro[9])},
+                {dot(Ro2w[0], ro[10]), dot(Ro2w[1], ro[10]), dot(Ro2w[2], ro[10])},
+                {dot(Ro2w[0], ro[11]), dot(Ro2w[1], ro[11]), dot(Ro2w[2], ro[11])},
+                {dot(Ro2w[0], ro[12]), dot(Ro2w[1], ro[12]), dot(Ro2w[2], ro[12])},
+                {dot(Ro2w[0], ro[13]), dot(Ro2w[1], ro[13]), dot(Ro2w[2], ro[13])},
+                {dot(Ro2w[0], ro[14]), dot(Ro2w[1], ro[14]), dot(Ro2w[2], ro[14])},
+                {dot(Ro2w[0], ro[15]), dot(Ro2w[1], ro[15]), dot(Ro2w[2], ro[15])},
+                {dot(Ro2w[0], ro[16]), dot(Ro2w[1], ro[16]), dot(Ro2w[2], ro[16])},
+                {dot(Ro2w[0], ro[17]), dot(Ro2w[1], ro[17]), dot(Ro2w[2], ro[17])},
+                {dot(Ro2w[0], ro[18]), dot(Ro2w[1], ro[18]), dot(Ro2w[2], ro[18])},
+                {dot(Ro2w[0], ro[19]), dot(Ro2w[1], ro[19]), dot(Ro2w[2], ro[19])}
+
+        };
+
+        float[] down = {0, 0, -1};
+
+        float[] signedAngles = {
+
+                (float) (Math.acos(dot(nw[0], down))),
+                (float) (Math.acos(dot(nw[1], down))),
+                (float) (Math.acos(dot(nw[2], down))),
+                (float) (Math.acos(dot(nw[3], down))),
+                (float) (Math.acos(dot(nw[4], down))),
+                (float) (Math.acos(dot(nw[5], down))),
+                (float) (Math.acos(dot(nw[6], down))),
+                (float) (Math.acos(dot(nw[7], down))),
+                (float) (Math.acos(dot(nw[8], down))),
+                (float) (Math.acos(dot(nw[9], down))),
+                (float) (Math.acos(dot(nw[10], down))),
+                (float) (Math.acos(dot(nw[11], down))),
+                (float) (Math.acos(dot(nw[12], down))),
+                (float) (Math.acos(dot(nw[13], down))),
+                (float) (Math.acos(dot(nw[14], down))),
+                (float) (Math.acos(dot(nw[15], down))),
+                (float) (Math.acos(dot(nw[16], down))),
+                (float) (Math.acos(dot(nw[17], down))),
+                (float) (Math.acos(dot(nw[18], down))),
+                (float) (Math.acos(dot(nw[19], down)))
+
+        };
+
+        float closestAngle = Float.valueOf(signedAngles[0]);
+        int closestIndex = 0;
+
+        for (int i = 1; i < signedAngles.length; i++) {
+            if (signedAngles[i] < closestAngle) {
+                closestAngle = Float.valueOf(signedAngles[i]);
+                closestIndex = i;
+            }
+        }
+
+        float[] zaxNewWInO = {-ro[closestIndex][0], -ro[closestIndex][1], -ro[closestIndex][2]};
+        float[] yaxOldWInO = Ro2w[1];
+        float[] xaxNewWInO = normalize(cross(yaxOldWInO, zaxNewWInO));
+        float[] yaxNewWInO = normalize(cross(zaxNewWInO, xaxNewWInO));
+
+        float[][] newRo2w = {xaxNewWInO, yaxNewWInO, zaxNewWInO};
+
+        if (newRo2w[1][0] > 0.998) { //singularity at north pole
+
+            flatteningEulerAngles[0] = (float) Math.atan2(newRo2w[0][2], newRo2w[2][2]);
+            flatteningEulerAngles[1] = (float) (Math.PI / 2);
+            flatteningEulerAngles[2] = 0;
+
+
+        }
+        else if (newRo2w[1][0] < -0.998) { // singularity at south pole
+
+            flatteningEulerAngles[0] = (float) Math.atan2(newRo2w[0][2], newRo2w[2][2]);
+            flatteningEulerAngles[1] = (float) - (Math.PI / 2);
+            flatteningEulerAngles[2] = 0;
+
+        }
+        else {
+
+            flatteningEulerAngles[0] = (float) Math.atan2(-newRo2w[2][0], newRo2w[0][0]);
+            flatteningEulerAngles[1] = (float) Math.asin(newRo2w[1][0]);
+            flatteningEulerAngles[2] = (float) Math.atan2(-newRo2w[1][2], newRo2w[1][1]);
+
+        }
+
+        flatteningEulerAngles[0] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[0]));
+        flatteningEulerAngles[1] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[1]));
+        flatteningEulerAngles[2] = (float) Math.rint(Math.toDegrees(flatteningEulerAngles[2]));
+
+        if (flatteningEulerAngles[0] < 0.0f) {flatteningEulerAngles[0] += 360.0f;}
+        if (flatteningEulerAngles[1] < 0.0f) {flatteningEulerAngles[1] += 360.0f;}
+        if (flatteningEulerAngles[2] < 0.0f) {flatteningEulerAngles[2] += 360.0f;}
+
+        if (flatteningEulerAngles[0] == -0.0f) {flatteningEulerAngles[0] = 0.0f;}
+        if (flatteningEulerAngles[1] == -0.0f) {flatteningEulerAngles[1] = 0.0f;}
+        if (flatteningEulerAngles[2] == -0.0f) {flatteningEulerAngles[2] = 0.0f;}
+
+        return flatteningEulerAngles;
+
     }
 
 }

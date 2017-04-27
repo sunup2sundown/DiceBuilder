@@ -18,11 +18,11 @@ import javax.microedition.khronos.opengles.GL11;
 
 public class DiceMesh {
 
-    private int numberOfIndices = -1;
-    private FloatBuffer vertexBuffer;
-    private ShortBuffer indexBuffer;
+    protected int numberOfIndices = -1;
+    protected FloatBuffer vertexBuffer;
+    protected ShortBuffer indexBuffer;
 
-    private boolean mShouldLoadTexture = false;
+    protected boolean mShouldLoadTexture = false;
 
     public float translateX = 0;
     public float translateY = 0;
@@ -125,7 +125,7 @@ public class DiceMesh {
 
     }
 
-    private FloatBuffer mTextureBuffer;
+    protected FloatBuffer mTextureBuffer;
 
     protected void setTextureCoordinates(float[] textureCoordinates) {
 
@@ -137,8 +137,8 @@ public class DiceMesh {
 
     }
 
-    private int mTextureId = -1;
-    private Bitmap mBitmap;
+    protected int mTextureId = -1;
+    protected Bitmap mBitmap;
 
     public void loadBitmap(Bitmap bitmap) {
 
@@ -147,7 +147,7 @@ public class DiceMesh {
 
     }
 
-    private void loadGLTexture(GL10 gl) {
+    protected void loadGLTexture(GL10 gl) {
 
         int[] textures = new int[1];
         gl.glGenTextures(1, textures, 0);

@@ -2,6 +2,8 @@ package edu.okami.m.dicebuilder;
 
 import android.util.Log;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class DicePhysics {
 
     public float rotateX, rotateY, rotateZ, translateX, translateY, translateZ, radius;
@@ -143,11 +145,31 @@ public class DicePhysics {
 
     }
 
-    public void collisionEvent(float crashingVelocity[]) {
+    public void collisionEvent(float crashingVelocity[], float crashingLocation[]) {
 
-        velocityXYZ[0] = Float.valueOf(crashingVelocity[0]);
-        velocityXYZ[1] = Float.valueOf(crashingVelocity[1]);
-        velocityXYZ[2] = Float.valueOf(crashingVelocity[2]);
+        float moveRadius = 0;
+
+        if (translateX > crashingLocation[0]) {moveRadius = radius;}
+        if (translateX < crashingLocation[0]) {moveRadius = -radius;}
+        translateX += ((crashingLocation[0] - translateX) / 2) + moveRadius;
+
+        if (translateY > crashingLocation[1]) {moveRadius = radius;}
+        if (translateY < crashingLocation[1]) {moveRadius = -radius;}
+        translateY += ((crashingLocation[1] - translateY) / 2) + moveRadius;
+
+        /**
+        translateY += (translateY - crashingLocation[1]) / 2;
+        translateZ += (translateZ - crashingLocation[2]) / 2;
+         **/
+
+        if (translateX + radius > xBoundary) {translateX = xBoundary - radius;}
+        if (translateX - radius < -xBoundary) {translateX = -xBoundary + radius;}
+        if (translateY + radius > yBoundary) {translateY = yBoundary - radius;}
+        if (translateY - radius < -yBoundary) {translateY = -yBoundary + radius;}
+
+        velocityXYZ[0] = Float.valueOf(crashingVelocity[0]) * 0.8f;
+        velocityXYZ[1] = Float.valueOf(crashingVelocity[1]) * 0.8f;
+        velocityXYZ[2] = Float.valueOf(crashingVelocity[2]) * 0.8f;
 
     }
 
@@ -159,13 +181,15 @@ public class DicePhysics {
         if ((translateX >= (xBoundary - radius)) | (translateX <= (radius - xBoundary))) {
 
             float[] wallHitVelocity = {- Float.valueOf(velocityXYZ[0]), velocityXYZ[1], velocityXYZ[2]};
-            collisionEvent(wallHitVelocity);
+            float[] myTranslate = {translateX, translateY, translateZ};
+            collisionEvent(wallHitVelocity, myTranslate);
 
         }
         else if ((translateY >= (yBoundary - radius)) | (translateY <= (radius - yBoundary))) {
 
             float[] wallHitVelocity = {velocityXYZ[0], - Float.valueOf(velocityXYZ[1]), velocityXYZ[2]};
-            collisionEvent(wallHitVelocity);
+            float[] myTranslate = {translateX, translateY, translateZ};
+            collisionEvent(wallHitVelocity, myTranslate);
 
         }
 
@@ -215,6 +239,11 @@ public class DicePhysics {
 
         translateX += velocityXYZ[0];
         translateY += velocityXYZ[1];
+
+        if (translateX + radius > xBoundary) {translateX = xBoundary - radius;}
+        if (translateX - radius < -xBoundary) {translateX = -xBoundary + radius;}
+        if (translateY + radius > yBoundary) {translateY = yBoundary - radius;}
+        if (translateY - radius < -yBoundary) {translateY = -yBoundary + radius;}
 
         velocityMagnitude = (float) Math.sqrt((velocityXYZ[0] * velocityXYZ[0]) + (velocityXYZ[1] * velocityXYZ[1]));
 
@@ -298,12 +327,21 @@ public class DicePhysics {
 
             isAirborne = true;
             float timeElapsed = (currentTime - previousTime) * .001f;
+            int rando = 0;
+            float random = 0;
 
             if (shakeAcceleration < 1) {shakeAcceleration = 1;}
             if (shakeAcceleration > 5) {shakeAcceleration = 5;}
+
             velocityXYZ[2] = shakeAcceleration * timeElapsed * 5;
-            velocityXYZ[0] += velocityDueToGravity(orientationAngles[2]);
-            velocityXYZ[1] += velocityDueToGravity(orientationAngles[1]);
+
+            rando = (int) (Math.random() * 19) - 10;
+            random = 1.0f + (rando * 0.1f);
+            velocityXYZ[0] += ((velocityDueToGravity(orientationAngles[2]) + .05 ) * shakeAcceleration) * random;
+
+            rando = (int) (Math.random() * 9);
+            random = 1.0f + (rando * 0.1f);
+            velocityXYZ[1] += ((velocityDueToGravity(orientationAngles[1]) + .05 )* shakeAcceleration) * random;
 
         }
 
