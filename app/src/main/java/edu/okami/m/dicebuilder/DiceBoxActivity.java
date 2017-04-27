@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+import edu.okami.m.dicebuilder.Adapters.DiceAdapter;
 import edu.okami.m.dicebuilder.Adapters.GridAdapter;
 import edu.okami.m.dicebuilder.Dialogs.CreateDiceDialog;
 import edu.okami.m.dicebuilder.Dialogs.NoDiceDialog;
@@ -75,7 +76,7 @@ public class DiceBoxActivity extends AppCompatActivity
 
         if(filesArray != null){
             if(filesArray.size() > 0){
-                gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridWithDice()));
+                gridView.setAdapter(new DiceAdapter(this, R.layout.gridview_layout, populateGridWithDice()));
             } else{
                 NoDiceDialog register = new NoDiceDialog();
                 register.show(getSupportFragmentManager(), "NoDiceDialog");
@@ -177,8 +178,10 @@ public class DiceBoxActivity extends AppCompatActivity
 
         ArrayList<String> arrayOfFiles = getFileNames(boxDirectory.listFiles());
 
+
         for(int i = 0; i < arrayOfFiles.size(); i++){
-            String path = boxDirectory.getPath().concat(arrayOfFiles.get(i));
+            String path = boxDirectory.getPath().concat("/"+arrayOfFiles.get(i));
+
             CustomDie cd = new CustomDie(path, getApplicationContext());
 
             DiceItem tempDI = new DiceItem(bitmap, arrayOfFiles.get(i), cd);
