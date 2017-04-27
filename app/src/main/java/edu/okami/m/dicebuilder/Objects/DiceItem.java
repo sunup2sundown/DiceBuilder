@@ -2,6 +2,8 @@ package edu.okami.m.dicebuilder.Objects;
 
 import android.graphics.Bitmap;
 
+import edu.okami.m.dicebuilder.CustomDie;
+
 /**
  * Created by M on 4/26/2017.
  */
@@ -9,11 +11,13 @@ import android.graphics.Bitmap;
 public class DiceItem {
     private Bitmap image;
     private String title;
+    private CustomDie customDie;
 
-    public DiceItem(Bitmap image, String title){
+    public DiceItem(Bitmap image, String title, CustomDie customDie){
         super();
         this.image = image;
         this.title = title;
+        this.customDie = customDie;
     }
 
     public Bitmap getImage(){
@@ -30,5 +34,13 @@ public class DiceItem {
 
     public void setTitle(String title){
         this.title = title;
+    }
+
+    public CustomDie getCustomDie(){
+        return customDie;
+    }
+
+    public void setCustomDie(CustomDie customDie){
+        this.customDie = customDie;
     }
 }
