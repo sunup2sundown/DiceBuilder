@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
@@ -23,7 +24,9 @@ public class DiceboxLongpressDialog extends DialogFragment {
     * this interface in order to recieve event callbacks
      */
     public interface DiceboxLongpressDialogListener{
-        void onDiceboxLongpressClick(DialogFragment dialog);
+        public void onDiceboxLongpressPositiveClick(DialogFragment dialog);
+        public void onDiceboxLongpressNeutralClick(DialogFragment dialog);
+        public void onDiceboxLongpressNegativeClick(DialogFragment dialog);
     }
 
     //Override Fragment.onAttach method to instantiate listener
@@ -50,27 +53,26 @@ public class DiceboxLongpressDialog extends DialogFragment {
 
         //Inflate dialog with Custom Layout
         //Null for parent view
-        builder.setView(inflater.inflate(R.layout.dialog_nodice, null))
-                .setItems(R.array.dicebox_longpress_array, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDiceboxLongpressClick(DiceboxLongpressDialog.this);
-                    }
-                });
-                /*
-                .setPositiveButton("Create a dice", new DialogInterface.OnClickListener(){
+        builder.setView(inflater.inflate(R.layout.dialog_diceboxlongpress, null))
+                .setTitle("Choose an Option...")
+                .setPositiveButton("Share the Dicebox", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
                         mListener.onDiceboxLongpressPositiveClick(DiceboxLongpressDialog.this);
                     }
                 })
-                .setNegativeButton("Not now", new DialogInterface.OnClickListener(){
+                .setNeutralButton("Delete the Dicebox", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mListener.onDiceboxLongpressNeutralClick(DiceboxLongpressDialog.this);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //send the negative button event back to host activity
                         mListener.onDiceboxLongpressNegativeClick(DiceboxLongpressDialog.this);
                     }
                 });
-                */
         //Create Dialog object and return it
         return builder.create();
     }

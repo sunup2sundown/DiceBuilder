@@ -46,6 +46,7 @@ import java.util.List;
 
 import edu.okami.m.dicebuilder.Adapters.GridAdapter;
 import edu.okami.m.dicebuilder.Dialogs.CreateDiceboxDialog;
+import edu.okami.m.dicebuilder.Dialogs.DiceboxLongpressDialog;
 import edu.okami.m.dicebuilder.Dialogs.NoDiceboxDialog;
 import edu.okami.m.dicebuilder.Objects.GridItem;
 
@@ -54,7 +55,8 @@ import edu.okami.m.dicebuilder.Objects.GridItem;
  */
 
 public class DashboardActivity extends AppCompatActivity
-        implements NoDiceboxDialog.NoDiceboxDialogListener, CreateDiceboxDialog.CreateDiceboxDialogListener{
+        implements NoDiceboxDialog.NoDiceboxDialogListener, CreateDiceboxDialog.CreateDiceboxDialogListener,
+        DiceboxLongpressDialog.DiceboxLongpressDialogListener{
     private final String TAG = "DashboardActivity";
 
     private File userDirectory;
@@ -129,6 +131,8 @@ public class DashboardActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 GridItem item = (GridItem)parent.getItemAtPosition(position);
 
+                DiceboxLongpressDialog dialog = new DiceboxLongpressDialog();
+                dialog.show(getSupportFragmentManager(), "DiceboxLongpressDialog");
 
                 return true;
             }
@@ -240,6 +244,29 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onCreateDiceboxNegativeClick(DialogFragment dialog){
         dialog.getDialog().cancel();
+    }
+
+    /*
+    * Dice Box Long press Dialog Implementation
+    *
+     */
+    @Override
+    public void onDiceboxLongpressPositiveClick(DialogFragment dialog){
+
+        //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+
+    }
+    @Override
+    public void onDiceboxLongpressNeutralClick(DialogFragment dialog){
+
+        //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+
+    }
+    @Override
+    public void onDiceboxLongpressNegativeClick(DialogFragment dialog){
+
+        //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+
     }
 
     private void uploadFile(Bitmap bitmap){
