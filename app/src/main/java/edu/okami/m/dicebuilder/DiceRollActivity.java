@@ -154,7 +154,7 @@ public class DiceRollActivity extends AppCompatActivity implements SensorEventLi
         shakeAcceleration = currentZ - lastZ;
 
 
-        if (shakeAcceleration >= 0.5) {
+        if (shakeAcceleration >= 1.0) {
 
             diceRenderer.getShake(shakeAcceleration);
 

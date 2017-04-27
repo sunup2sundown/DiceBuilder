@@ -3,6 +3,7 @@ package edu.okami.m.dicebuilder;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +35,7 @@ public class ResultRenderer extends GLRenderer {
         } else if (customDie.getNumberOfSides() == 8) {
             diceMesh = new EightSidedMesh(1.0f);
         } else if (customDie.getNumberOfSides() == 10) {
-            diceMesh = new TenSidedMesh(1.0f);
+            diceMesh = new TenSidedMesh(0.75f);
         } else if (customDie.getNumberOfSides() == 12) {
             diceMesh = new TwelveSidedMesh(1.0f);
         } else if (customDie.getNumberOfSides() == 20) {
@@ -48,6 +49,14 @@ public class ResultRenderer extends GLRenderer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        if ((bitmap.getWidth() / 2) == 2560) {
+
+            Log.d("Scaling", "Tried scaling a 20 sided texture?");
+            bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 128, false);
+
+        }
+
         diceMesh.loadBitmap(bitmap);
 
     }

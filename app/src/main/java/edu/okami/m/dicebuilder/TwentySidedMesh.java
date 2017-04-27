@@ -1,5 +1,8 @@
 package edu.okami.m.dicebuilder;
 
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+
 public class TwentySidedMesh extends DiceMesh {
 
     private float scaleFactor;
@@ -482,6 +485,71 @@ public class TwentySidedMesh extends DiceMesh {
         if (flatteningEulerAngles[2] == -0.0f) {flatteningEulerAngles[2] = 0.0f;}
 
         return flatteningEulerAngles;
+
+    }
+
+    @Override
+    public void draw(GL10 gl) {
+
+        GL11 gl11 = (GL11) gl;
+
+        // Counter-clockwise winding
+        gl.glFrontFace(GL10.GL_CCW);
+        // Enable non-rendering of faces
+        gl.glEnable(GL10.GL_CULL_FACE);
+        // Choose faces not facing screen to cull
+        gl.glCullFace(GL10.GL_BACK);
+
+        if (mShouldLoadTexture) {
+            loadGLTexture(gl);
+            mShouldLoadTexture = false;
+        }
+        if (mTextureId != -1 && mTextureBuffer != null) {
+            gl.glEnable(GL10.GL_TEXTURE_2D);
+            // Enable the texture state
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+
+            // Point to our buffers
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
+        }
+
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+
+        gl.glTranslatef(translateX, translateY, translateZ);
+        gl.glRotatef(theta, rotateVelocityY, -rotateVelocityX, 0);
+
+        //Order needed to correspond with Eueler Angle function
+        gl.glRotatef(rotateY, 0, 1, 0);
+        gl.glRotatef(rotateZ, 0, 0, 1);
+        gl.glRotatef(rotateX, 1, 0, 0);
+
+        gl11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, matrixArray, 0);
+
+        /**
+         //Test Area
+         float[] testVelocity = {3.0f, 5.0f, 0.0f};
+         changingTheta++;
+         gl.glRotatef(changingTheta, -testVelocity[1], testVelocity[0], 1);
+
+         if (changingTheta < 20) {Log.d("Print the array", Arrays.toString(array));}
+
+         //Test Area
+         **/
+
+        gl.glDrawElements(GL10.GL_TRIANGLES, numberOfIndices, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+
+        if (mTextureId != -1 && mTextureBuffer != null) {
+            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        }
+
+        gl.glDisable(GL10.GL_CULL_FACE);
+        gl.glDisable(GL10.GL_TEXTURE_2D);
+
+        gl.glLoadIdentity();
 
     }
 

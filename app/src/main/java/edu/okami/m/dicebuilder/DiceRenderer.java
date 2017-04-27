@@ -60,7 +60,7 @@ public class DiceRenderer extends GLRenderer {
             } else if (customDie[i].getNumberOfSides() == 8) {
                 diceMesh[i] = new EightSidedMesh(1.0f);
             } else if (customDie[i].getNumberOfSides() == 10) {
-                diceMesh[i] = new TenSidedMesh(1.0f);
+                diceMesh[i] = new TenSidedMesh(0.75f);
             } else if (customDie[i].getNumberOfSides() == 12) {
                 diceMesh[i] = new TwelveSidedMesh(1.0f);
             } else if (customDie[i].getNumberOfSides() == 20) {
@@ -86,14 +86,14 @@ public class DiceRenderer extends GLRenderer {
 
             if ((bitmap.getWidth() / 2) == 3072) {
 
-                Log.d("Scaling", "Tried scaling a 10 sided texture.");
+                Log.d("Scaling", "Tried scaling a 12 sided texture.");
                 bitmap = Bitmap.createScaledBitmap(bitmap, 1536, 128, false);
 
             }
 
             if ((bitmap.getWidth() / 2) == 5120) {
 
-                Log.d("Scaling", "Tried scaling a 10 sided texture.");
+                Log.d("Scaling", "Tried scaling a 20 sided texture.");
                 bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 64, false);
 
             }
