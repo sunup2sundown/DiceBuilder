@@ -2,6 +2,7 @@ package edu.okami.m.dicebuilder;
 
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -108,6 +109,13 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         //TODO: Get download link for image in storage
         //TODO: Use Userid to get database reference to user's images
         //TODO: Store the name and download link in user's images in database
+    }
+
+    public void backToDiceBox(){
+        Intent i = new Intent(this, DiceBoxActivity.class);
+        i.putExtra("BoxName", boxName);
+        i.putExtra("UserID", userId);
+        startActivity(i);
     }
 }
 
