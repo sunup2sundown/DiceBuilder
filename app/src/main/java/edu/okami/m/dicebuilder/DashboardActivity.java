@@ -318,26 +318,6 @@ public class DashboardActivity extends AppCompatActivity
         });
     }
 
-    private void downloadFile(StorageReference storageReference, String name){
-        final long ONE_MEAGABYTE = 1024 * 1024;
-        //TODO: NEed to download file from URLs stored in database and then populate gridview
-
-        StorageReference diceBoxReference = storageReference.child("dicebox/" + name);
-        diceBoxReference.getBytes(ONE_MEAGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                //Data for image is returned
-                //TODO: Do what you want with image
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(Exception e) {
-                //TODO: Handle any errors
-            }
-        });
-    }
-
-
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
 

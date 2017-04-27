@@ -22,6 +22,8 @@
         android:textColor="@android:color/white"
         android:text="Log into your Account"
         android:layout_marginTop="48dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:background="@drawable/dashboard_button"
         android:layout_below="@+id/login_image"
         android:layout_centerHorizontal="true"/>
@@ -32,6 +34,8 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/dashboard_button"
         android:layout_below="@+id/login_btn_login"
