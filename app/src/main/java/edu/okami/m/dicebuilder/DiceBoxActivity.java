@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class DiceBoxActivity extends AppCompatActivity
 
     private File boxDirectory;
 
-    private ArrayList<CustomDie> passDiceToRoll = new ArrayList<CustomDie>();
+    private ArrayList<String> passPathsToRoll = new ArrayList<String>();
 
     private Button button;
     private GridView gridView;
@@ -90,9 +91,14 @@ public class DiceBoxActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DiceItem item = (DiceItem)parent.getItemAtPosition(position);
-                CustomDie die = (CustomDie)item.getCustomDie();
+                String filePath = item.getFilePath();
 
-                passDiceToRoll.add(die);
+                if(passPathsToRoll.size() < MAX_DICE){
+                    passPathsToRoll.add(filePath);
+                } else{
+                    Toast.makeText(getApplicationContext(), "You cannot roll anymore dice.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -123,10 +129,23 @@ public class DiceBoxActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item){
         //Handle Tool bar item clicks
         int id = item.getItemId();
+        Intent i;
 
         switch (id){
             case R.id.action_add_dice:
+                i = new Intent(getApplicationContext(), textureActivity.class);
+                i.putExtra("BoxName", boxName);
+                i.putExtra("UserID", userId);
+                startActivity(i);
                 break;
+            case R.id.action_roll_dice:
+                if(passPathsToRoll.size() > 0){
+                    i = new Intent(getApplicationContext(), DiceRollActivity.class);
+                    i.putExtra("PATHS", passPathsToRoll);
+                    startActivity(i);
+                } else{
+                    Toast.makeText(this, "You need to select a die to roll", Toast.LENGTH_SHORT).show();
+                }
             default:
         }
         return super.onOptionsItemSelected(item);
@@ -182,9 +201,7 @@ public class DiceBoxActivity extends AppCompatActivity
         for(int i = 0; i < arrayOfFiles.size(); i++){
             String path = boxDirectory.getPath().concat("/"+arrayOfFiles.get(i));
 
-            CustomDie cd = new CustomDie(path, getApplicationContext());
-
-            DiceItem tempDI = new DiceItem(bitmap, arrayOfFiles.get(i), cd);
+            DiceItem tempDI = new DiceItem(bitmap, arrayOfFiles.get(i), path);
             arrayOfDiceItems.add(tempDI);
         }
 

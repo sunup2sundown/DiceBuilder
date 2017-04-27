@@ -53,7 +53,7 @@ public class DiceAdapter extends ArrayAdapter {
         DiceItem item = data.get(pos);
         holder.diceTitle.setText(item.getTitle());
         holder.diceImage.setImageBitmap(item.getImage());
-        holder.customDie = item.getCustomDie();
+        holder.diceFilePath = item.getFilePath();
 
         return row;
     }
@@ -61,6 +61,6 @@ public class DiceAdapter extends ArrayAdapter {
     static class ViewHolder{
         TextView diceTitle;
         ImageView diceImage;
-        CustomDie customDie;
+        String diceFilePath;
     }
 }

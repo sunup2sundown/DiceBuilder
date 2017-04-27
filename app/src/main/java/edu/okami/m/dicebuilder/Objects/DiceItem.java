@@ -11,13 +11,13 @@ import edu.okami.m.dicebuilder.CustomDie;
 public class DiceItem {
     private Bitmap image;
     private String title;
-    private CustomDie customDie;
+    private String filePath;
 
-    public DiceItem(Bitmap image, String title, CustomDie customDie){
+    public DiceItem(Bitmap image, String title, String filePath){
         super();
         this.image = image;
         this.title = title;
-        this.customDie = customDie;
+        this.filePath = filePath;
     }
 
     public Bitmap getImage(){
@@ -36,11 +36,11 @@ public class DiceItem {
         this.title = title;
     }
 
-    public CustomDie getCustomDie(){
-        return customDie;
+    public String getFilePath(){
+        return filePath;
     }
 
-    public void setCustomDie(CustomDie customDie){
-        this.customDie = customDie;
+    public void setFilePath(String filePath){
+        this.filePath = filePath;
     }
 }

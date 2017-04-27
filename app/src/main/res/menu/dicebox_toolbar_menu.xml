@@ -8,4 +8,10 @@
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_input_add">
     </item>
+    <item
+        android:id="@+id/action_roll_dice"
+        android:title="Roll Dice"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_media_play">
+    </item>
 </menu>
