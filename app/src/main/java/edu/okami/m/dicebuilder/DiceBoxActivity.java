@@ -136,6 +136,8 @@ public class DiceBoxActivity extends AppCompatActivity
     @Override
     public void onNoDicePositiveClick(DialogFragment dialog){
         Intent i = new Intent(getApplicationContext(), textureActivity.class);
+        i.putExtra("BoxName", boxName);
+        i.putExtra("UserID", userId);
         startActivity(i);
     }
 
@@ -165,9 +167,11 @@ public class DiceBoxActivity extends AppCompatActivity
         dialog.getDialog().cancel();
     }
 
+
     private ArrayList<DiceItem> populateGridWithDice(){
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.boba_fett);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ten_sided_shape);
         ArrayList<DiceItem> arrayOfDiceItems = new ArrayList<DiceItem>();
+
         ArrayList<String> arrayOfFiles = getFileNames(boxDirectory.listFiles());
 
         for(int i = 0; i < arrayOfFiles.size(); i++){
