@@ -25,7 +25,7 @@ public class CustomDie {
 
         ///data/user/0/edu.okami.m.dicebuilder/app_Test_Dice_Box/Six_Sided_Die.png
 
-        String[] splitPath = path.split("/app_");
+        String[] splitPath = path.split("/app_useid/");
         String shortPath = splitPath[splitPath.length - 1];
         splitPath = shortPath.split("/");
 
