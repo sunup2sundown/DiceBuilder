@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DiceRollActivity extends AppCompatActivity implements SensorEventListener, DiceRenderer.Rotatable {
 
@@ -63,28 +64,41 @@ public class DiceRollActivity extends AppCompatActivity implements SensorEventLi
 
         currentZ = 9.8f;
 
-        //Test Code
+        /**Test Code
         Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.drawable.four_sided_texture);
+                R.drawable.six_sided_texture);
         String internalPath = saveToInternalStorage(bitmap);
 
         customDie = new CustomDie(internalPath, getApplicationContext());
 
-        customDice = new CustomDie[1];
+        customDice = new CustomDie[5];
         customDice[0] = customDie;
-        //customDice[1] = customDie;
-        //customDice[2] = customDie;
-        //customDice[3] = customDie;
-        //customDice[4] = customDie;
+        customDice[1] = customDie;
+        customDice[2] = customDie;
+        customDice[3] = customDie;
+        customDice[4] = customDie;
+         **/
+
+        ArrayList<String> dieArrayList;
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            dieArrayList = bundle.getStringArrayList("PATHS");
+
+            customDice = new CustomDie[dieArrayList.size()];
+
+            for (int i = 0; i < dieArrayList.size(); i++) {
+                customDice[i] = new CustomDie(dieArrayList.get(i), getApplicationContext());
+            }
+
+        }
+
         diceRenderer = new DiceRenderer(customDice, this, screenWidth, screenHeight);
 
-        /**
         //Make the Activity go full screen with no title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-         **/
 
         glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setRenderer(diceRenderer);

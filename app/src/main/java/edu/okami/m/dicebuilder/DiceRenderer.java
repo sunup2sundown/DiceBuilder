@@ -74,6 +74,30 @@ public class DiceRenderer extends GLRenderer {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+            Log.d("Scaling", Integer.toString(bitmap.getWidth()));
+
+            if ((bitmap.getWidth() / 2) == 2560) {
+
+                Log.d("Scaling", "Tried scaling a 10 sided texture.");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 128, false);
+
+            }
+
+            if ((bitmap.getWidth() / 2) == 3072) {
+
+                Log.d("Scaling", "Tried scaling a 10 sided texture.");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 1536, 128, false);
+
+            }
+
+            if ((bitmap.getWidth() / 2) == 5120) {
+
+                Log.d("Scaling", "Tried scaling a 10 sided texture.");
+                bitmap = Bitmap.createScaledBitmap(bitmap, 1280, 64, false);
+
+            }
+
             diceMesh[i].loadBitmap(bitmap);
             dicePhysics[i] = new DicePhysics(i + 1, this.customDie.length, diceMesh[i].getRadius());
         }
@@ -96,6 +120,13 @@ public class DiceRenderer extends GLRenderer {
 
         orientationAngles = parent.getOrientationAngles();
 
+        for (int i = 0; i < customDie.length; i++) {
+
+            dicePhysics[i].updateOrientation(orientationAngles);
+            dicePhysics[i].updateLocation();
+
+        }
+
 
         for (int i = 0; i < customDie.length; i++) {
 
@@ -113,8 +144,15 @@ public class DiceRenderer extends GLRenderer {
                         float[] valueHolderJ = {Float.valueOf(velocityHolderJ[0]),
                                 Float.valueOf(velocityHolderJ[1]),
                                 Float.valueOf(velocityHolderJ[2])};
-                        dicePhysics[i].collisionEvent(valueHolderJ);
-                        dicePhysics[j].collisionEvent(valueHolderI);
+
+                        float[] translateHolderI = {Float.valueOf(dicePhysics[i].translateX),
+                                Float.valueOf(dicePhysics[i].translateY),
+                                Float.valueOf(dicePhysics[i].translateZ)};
+                        float[] translateHolderJ = {Float.valueOf(dicePhysics[j].translateX),
+                                Float.valueOf(dicePhysics[j].translateY),
+                                Float.valueOf(dicePhysics[j].translateZ)};
+                        dicePhysics[i].collisionEvent(valueHolderJ, translateHolderJ);
+                        dicePhysics[j].collisionEvent(valueHolderI, translateHolderI);
 
 
                     }
@@ -126,9 +164,6 @@ public class DiceRenderer extends GLRenderer {
         }
 
         for (int i = 0; i < customDie.length; i++) {
-
-            dicePhysics[i].updateOrientation(orientationAngles);
-            dicePhysics[i].updateLocation();
 
             if (dicePhysics[i].isRolling) {
                 diceMesh[i].theta = dicePhysics[i].theta;
