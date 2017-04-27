@@ -26,6 +26,8 @@
         <activity
             android:name=".DiceRollActivity"
             android:label="@string/title_activity_dice_roll"
+            android:configChanges="keyboard|screenSize|orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
