@@ -53,7 +53,7 @@ public class LoginDialog extends DialogFragment {
         //Inflate dialog with Custom Layout
         //Null for parent view
         builder.setView(inflater.inflate(R.layout.dialog_login, null))
-                .setPositiveButton("Sign up", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Log in", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
                         mListener.onLoginPositiveClick(LoginDialog.this);

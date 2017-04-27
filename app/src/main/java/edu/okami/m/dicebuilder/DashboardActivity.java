@@ -146,15 +146,6 @@ public class DashboardActivity extends AppCompatActivity
                 return true;
             }
         });
-
-        button = (Button)findViewById(R.id.button_dashboard_create);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateDiceboxDialog register = new CreateDiceboxDialog();
-                register.show(getSupportFragmentManager(), "CreateDiceboxDialog");
-            }
-        });
     }
 
     @Override
@@ -285,7 +276,10 @@ public class DashboardActivity extends AppCompatActivity
      */
     @Override
     public void onShareDiceBoxPositiveClick(DialogFragment dialog){
-
+        EditText toFriend = (EditText)findViewById(R.id.share_dicebox_text);
+        //TODO: Find Friend user id
+        //TODO: Store dicebox and get download link
+        //TODO: Post download link and dicebox name to user ids downloads
     }
     @Override
     public void onShareDiceBoxNegativeClick(DialogFragment dialog){

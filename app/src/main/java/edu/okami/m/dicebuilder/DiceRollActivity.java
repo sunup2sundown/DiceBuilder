@@ -43,10 +43,14 @@ public class DiceRollActivity extends AppCompatActivity implements SensorEventLi
 
     private float currentZ, lastZ, shakeAcceleration;
 
+    private ArrayList<String> imagePaths;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        imagePaths = getIntent().getStringArrayListExtra("PATHS");
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

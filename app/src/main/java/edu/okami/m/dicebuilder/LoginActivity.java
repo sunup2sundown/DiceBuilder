@@ -3,6 +3,7 @@ package edu.okami.m.dicebuilder;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -65,25 +67,6 @@ public class LoginActivity extends AppCompatActivity
             public void onClick(View view) {
                 RegisterDialog register = new RegisterDialog();
                 register.show(dialogManager, "RegisterDialog");
-            }
-        });
-
-        Button makeTexture = (Button)findViewById(R.id.button2);
-        makeTexture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent textureIntent = new Intent(getApplicationContext(), textureActivity.class);
-                textureIntent.putExtra("box_name", "test_box");
-                startActivity(textureIntent);
-            }
-        });
-
-        Button diceRoll = (Button) findViewById(R.id.diceRollButton);
-        diceRoll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent diceRollIntent = new Intent(getApplicationContext(), DiceRollActivity.class);
-                startActivity(diceRollIntent);
             }
         });
 
@@ -224,6 +207,7 @@ public class LoginActivity extends AppCompatActivity
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot data : dataSnapshot.getChildren()){
                         String inDatabase = data.getKey();
+
                         if(inDatabase.contentEquals(username)){
                             Log.d(TAG, "USername exists");
                             String userId = data.getValue().toString();

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.okami.m.dicebuilder.Objects.UserDetails;
 
@@ -38,79 +48,52 @@ public class DownloadsActivity extends AppCompatActivity {
     ArrayList<String> downloads = new ArrayList<>();
     int totalDownloads;
 
+    Firebase downloadReference;
+
     ProgressDialog pd;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloads);
 
-        downloadsList = (ListView)findViewById(R.id.downloadsList);
-        noDownloadsText = (TextView)findViewById(R.id.noDownloadsText);
-
-        pd = new ProgressDialog(DownloadsActivity.this);
-        pd.setMessage("Loading...");
-        pd.show();
+        downloadsList = (ListView) findViewById(R.id.downloadsList);
+        noDownloadsText = (TextView) findViewById(R.id.noDownloadsText);
 
         Intent i = getIntent();
-        String userId = i.getStringExtra("UserID");
+        final String userId = i.getStringExtra("UserID");
+        String url = "https://dicebuilder-15e03.firebaseio.com/users/details/" +userId + "/downloads.json";
+        DatabaseReference downloadReference = FirebaseDatabase.getInstance().getReference();
 
-        String userUrl = "https://dicebuilder-15e03.firebaseio.com/details/" + userId + "/images";
-        StringRequest request = new StringRequest(Request.Method.GET, userUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //TODO:Success
-                doOnSuccess(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        downloadReference.child("users").child("downloads").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                        for(com.google.firebase.database.DataSnapshot data : dataSnapshot.getChildren()){
+                            String inDatabase = data.getKey();
+                            Log.d(TAG, "Key: " + inDatabase);
+                            if(inDatabase.contentEquals(userId)){
+                                Log.d(TAG, "File Name: " + data.getValue());
+                                String url = data.getValue().toString();
 
-            }
-        });
+                                break;
+                            }
+                            else{
+                                Log.d(TAG, "Does not exist");
+                            }
+                        }
+                    }
 
-        RequestQueue rQueue = Volley.newRequestQueue(DownloadsActivity.this);
-        rQueue.add(request);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "Cancelled. USername exists");
+                    }
+                });
 
         downloadsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                //startActivity(new Intent(Users.this, Chat.class));
             }
         });
-    }
-
-    public void doOnSuccess(String s){
-        try {
-            JSONObject obj = new JSONObject(s);
-
-            Iterator i = obj.keys();
-            String key = "";
-
-            while(i.hasNext()){
-                key = i.next().toString();
-
-                if(!key.equals(UserDetails.username)) {
-                    downloads.add(key);
-                }
-
-                totalDownloads++;
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if(totalDownloads <=1){
-            noDownloadsText.setVisibility(View.VISIBLE);
-            downloadsList.setVisibility(View.GONE);
-        }
-        else{
-            noDownloadsText.setVisibility(View.GONE);
-            downloadsList.setVisibility(View.VISIBLE);
-            downloadsList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, downloads));
-        }
-
-        pd.dismiss();
     }
 }

@@ -94,26 +94,12 @@ public class DiceBoxActivity extends AppCompatActivity
                 String filePath = item.getFilePath();
 
                 if(passPathsToRoll.size() < MAX_DICE){
+                    Log.d(TAG, "Filepath: " + filePath);
                     passPathsToRoll.add(filePath);
                 } else{
                     Toast.makeText(getApplicationContext(), "You cannot roll anymore dice.", Toast.LENGTH_SHORT).show();
                 }
 
-            }
-        });
-
-        button = (Button)findViewById(R.id.button_dicebox_create);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                CreateDiceDialog register = new CreateDiceDialog();
-                register.show(getSupportFragmentManager(), "CreateDiceDialog");
-                */
-                Intent i = new Intent(getApplicationContext(), textureActivity.class);
-                i.putExtra("BoxName", boxName);
-                i.putExtra("UserID", userId);
-                startActivity(i);
             }
         });
     }

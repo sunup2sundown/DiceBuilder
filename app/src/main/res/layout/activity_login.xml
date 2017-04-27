@@ -7,33 +7,34 @@
     android:layout_height="match_parent"
     tools:context="edu.okami.m.dicebuilder.LoginActivity">
 
+    <ImageView
+        android:id="@+id/login_image"
+        android:src="@mipmap/ic_die_launcher"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp" />
+
     <Button
         android:id="@+id/login_btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:text="Log into your Account"
-        android:gravity="center_horizontal"/>
+        android:layout_marginTop="48dp"
+        android:background="@drawable/dashboard_button"
+        android:layout_below="@+id/login_image"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/login_btn_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create an Account"
-        android:layout_below="@+id/login_btn_login"/>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Make Texture"
-        android:layout_below="@+id/login_btn_signup"/>
-
-    <Button
-        android:id="@+id/diceRollButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dice Roll Activity"
-        android:layout_below="@+id/button2" />
-
+        android:textColor="@android:color/white"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/dashboard_button"
+        android:layout_below="@+id/login_btn_login"
+        android:text="Create an Account" />
 
 </RelativeLayout>
