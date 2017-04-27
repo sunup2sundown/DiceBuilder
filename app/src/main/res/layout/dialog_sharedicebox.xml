@@ -3,4 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/share_dicebox_text"
+        android:hint="Enter your Friend's Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

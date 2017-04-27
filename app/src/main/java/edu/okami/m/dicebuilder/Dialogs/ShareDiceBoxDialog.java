@@ -17,7 +17,7 @@ import edu.okami.m.dicebuilder.R;
 
 public class ShareDiceBoxDialog extends DialogFragment {
     private final String TAG = "ShareDiceBoxDialog";
-    private EditText username, password, confirmPassword;
+    private EditText friendName;
     ShareDiceBoxDialog.ShareDiceBoxDialogListener mListener;
 
     /*The activity that Shares instance of dialog must implement
@@ -53,7 +53,7 @@ public class ShareDiceBoxDialog extends DialogFragment {
         //Inflate dialog with Custom Layout
         //Null for parent view
         builder.setView(inflater.inflate(R.layout.dialog_sharedicebox, null))
-                .setPositiveButton("Create a dice", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Share Dicebox with a Friend", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
                         mListener.onShareDiceBoxPositiveClick(ShareDiceBoxDialog.this);

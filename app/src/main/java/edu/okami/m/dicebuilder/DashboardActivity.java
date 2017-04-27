@@ -48,6 +48,7 @@ import edu.okami.m.dicebuilder.Adapters.GridAdapter;
 import edu.okami.m.dicebuilder.Dialogs.CreateDiceboxDialog;
 import edu.okami.m.dicebuilder.Dialogs.DiceboxLongpressDialog;
 import edu.okami.m.dicebuilder.Dialogs.NoDiceboxDialog;
+import edu.okami.m.dicebuilder.Dialogs.ShareDiceBoxDialog;
 import edu.okami.m.dicebuilder.Objects.GridItem;
 
 /**
@@ -56,7 +57,7 @@ import edu.okami.m.dicebuilder.Objects.GridItem;
 
 public class DashboardActivity extends AppCompatActivity
         implements NoDiceboxDialog.NoDiceboxDialogListener, CreateDiceboxDialog.CreateDiceboxDialogListener,
-        DiceboxLongpressDialog.DiceboxLongpressDialogListener{
+        DiceboxLongpressDialog.DiceboxLongpressDialogListener, ShareDiceBoxDialog.ShareDiceBoxDialogListener{
     private final String TAG = "DashboardActivity";
 
     private File userDirectory;
@@ -71,6 +72,10 @@ public class DashboardActivity extends AppCompatActivity
     //Layout Components
     GridView gridView;
     Button button;
+    GridAdapter gridAdapter;
+
+    GridItem removeGridItem;
+    int removePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -102,7 +107,9 @@ public class DashboardActivity extends AppCompatActivity
 
         if(filesArray != null){
             if(filesArray.size() > 0){
-                gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+                gridAdapter = new GridAdapter(this, R.layout.gridview_layout, populateGridView());
+                gridView.setAdapter(gridAdapter);
+                gridAdapter.notifyDataSetChanged();
             } else{
                 NoDiceboxDialog register = new NoDiceboxDialog();
                 register.show(getSupportFragmentManager(), "NoDiceboxDialog");
@@ -130,6 +137,8 @@ public class DashboardActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 GridItem item = (GridItem)parent.getItemAtPosition(position);
+                removePosition = position;
+                removeGridItem = item;
 
                 DiceboxLongpressDialog dialog = new DiceboxLongpressDialog();
                 dialog.show(getSupportFragmentManager(), "DiceboxLongpressDialog");
@@ -162,6 +171,13 @@ public class DashboardActivity extends AppCompatActivity
 
         switch (id){
             case R.id.action_add_dicebox:
+                CreateDiceboxDialog dialog = new CreateDiceboxDialog();
+                dialog.show(getSupportFragmentManager(), "CreateDiceboxDialog");
+                break;
+            case R.id.action_download_dicebox:
+                Intent i = new Intent(getApplicationContext(), DownloadsActivity.class);
+                i.putExtra("UserID", userId);
+                startActivity(i);
                 break;
             default:
         }
@@ -231,14 +247,10 @@ public class DashboardActivity extends AppCompatActivity
 
         File directory = new File(userDirectory, boxName);
         directory.mkdir();
+        gridAdapter = new GridAdapter(this, R.layout.gridview_layout, populateGridView());
 
-        gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
-
-        /*
-        Intent i = new Intent(getApplicationContext(), DiceBoxActivity.class);
-        i.putExtra("BoxName", boxName);
-        startActivity(i);
-        */
+        gridView.setAdapter(gridAdapter);
+        gridAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -253,20 +265,31 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onDiceboxLongpressPositiveClick(DialogFragment dialog){
 
+        ShareDiceBoxDialog shareDialog = new ShareDiceBoxDialog();
+        shareDialog.show(getSupportFragmentManager(), "ShareDiceBoxDialog");
         //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
 
     }
     @Override
     public void onDiceboxLongpressNeutralClick(DialogFragment dialog){
-
-        //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
-
+        dialog.getDialog().cancel();
     }
     @Override
     public void onDiceboxLongpressNegativeClick(DialogFragment dialog){
+        deleteGridItem(removeGridItem, removePosition);
+    }
 
-        //gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+    /**
+     * Share Dice box with Friend Dialog
+     *
+     */
+    @Override
+    public void onShareDiceBoxPositiveClick(DialogFragment dialog){
 
+    }
+    @Override
+    public void onShareDiceBoxNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
     }
 
     private void uploadFile(Bitmap bitmap){
@@ -378,5 +401,20 @@ public class DashboardActivity extends AppCompatActivity
         return arrayListFiles;
     }
 
+    private void deleteGridItem(GridItem item, int position){
+        File directory = new File(userDirectory, item.getTitle());
+        deleteRecursive(directory);
+        gridAdapter.removeItem(position);
+        gridAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteRecursive(File directory){
+        if(directory.isDirectory()){
+            for(File child : directory.listFiles()){
+                deleteRecursive(child);
+            }
+        }
+        directory.delete();
+    }
 
 }

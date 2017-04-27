@@ -55,19 +55,19 @@ public class DiceboxLongpressDialog extends DialogFragment {
         //Null for parent view
         builder.setView(inflater.inflate(R.layout.dialog_diceboxlongpress, null))
                 .setTitle("Choose an Option...")
-                .setPositiveButton("Share the Dicebox", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Share Dicebox", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
                         mListener.onDiceboxLongpressPositiveClick(DiceboxLongpressDialog.this);
                     }
                 })
-                .setNeutralButton("Delete the Dicebox", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mListener.onDiceboxLongpressNeutralClick(DiceboxLongpressDialog.this);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                .setNegativeButton("Delete Dicebox", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //send the negative button event back to host activity
                         mListener.onDiceboxLongpressNegativeClick(DiceboxLongpressDialog.this);

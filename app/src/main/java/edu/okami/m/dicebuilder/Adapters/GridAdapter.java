@@ -59,6 +59,11 @@ public class GridAdapter extends ArrayAdapter {
         return row;
     }
 
+    public void removeItem(int position){
+        data.remove(position);
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder{
         TextView gridTitle;
         ImageView gridImage;

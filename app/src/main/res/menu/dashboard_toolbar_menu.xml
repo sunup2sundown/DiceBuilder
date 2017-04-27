@@ -9,4 +9,10 @@
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_input_add">
     </item>
+    <item
+        android:id="@+id/action_download_dicebox"
+        android:title="Check Downloads"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_upload">
+    </item>
 </menu>
