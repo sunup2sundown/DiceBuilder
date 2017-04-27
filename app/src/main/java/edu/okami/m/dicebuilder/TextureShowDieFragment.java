@@ -46,8 +46,9 @@ public class TextureShowDieFragment extends Fragment {
         backToBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent backToBox = new Intent(activity.getApplicationContext(), LoginActivity.class);
-                startActivity(backToBox);
+                //Intent backToBox = new Intent(activity.getApplicationContext(), DiceBoxActivity.class);
+                //startActivity(backToBox);
+                ((OnFragmentInteractionListener)activity).backToDiceBox();
             }
         });
 
@@ -80,5 +81,6 @@ public class TextureShowDieFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         public void beginShowDieFragment(String diceName);
+        public void backToDiceBox();
     }
 }

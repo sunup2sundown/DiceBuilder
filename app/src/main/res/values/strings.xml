@@ -21,4 +21,9 @@
         <item>20</item>
     </string-array>
 
+    <string-array name="dicebox_longpress_array">
+        <item>Share with a Friend</item>
+        <item>Delete Dicebox</item>
+    </string-array>
+
 </resources>

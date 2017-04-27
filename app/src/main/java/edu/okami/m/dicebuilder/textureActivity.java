@@ -2,6 +2,7 @@ package edu.okami.m.dicebuilder;
 
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,11 +18,14 @@ import java.io.IOException;
 public class textureActivity extends AppCompatActivity implements TextureCropFragment.OnFragmentInteractionListener,
         TextureMenuFragment.OnFragmentInteractionListener, TextureShowDieFragment.OnFragmentInteractionListener {
 
+    private final String TAG = "TextureActivity";
+
     TextureCropFragment cropFragment;
     TextureMenuFragment menuFragment;
     TextureShowDieFragment showDieFragment;
 
     String boxName = "default";
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +33,16 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         setContentView(R.layout.activity_texture);
 
         try{
-            boxName = getIntent().getStringExtra("box_name");
-            Log.d("box name", getIntent().getStringExtra("box_name"));
+            //boxName = getIntent().getStringExtra("box_name");
+            boxName = getIntent().getStringExtra("BoxName");
+            userId = getIntent().getStringExtra("UserID");
+            Log.d("box name", getIntent().getStringExtra("boxName"));
         } catch(Exception e){
             e.printStackTrace();
             Log.d("Box name passed", "no");
         }
 
+        Log.d(TAG, userId);
 
         cropFragment = new TextureCropFragment();
         menuFragment = new TextureMenuFragment();
@@ -70,16 +77,19 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
     @Override
     public String saveMergedImage(Bitmap image, String diceName) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
 
-        File directory = cw.getDir(boxName, getApplicationContext().MODE_PRIVATE);
+        File myPath=new File(directory, boxName);
+        File dicePath = new File(myPath, diceName+".png");
 
-        File myPath=new File(directory, diceName);
+        Log.d("dicePath", dicePath.getAbsolutePath());
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(myPath);
+            fos = new FileOutputStream(dicePath);
             // Use the compress method on the BitMap object to write image to the OutputStream
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            saveToFirebase(boxName, image);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -90,10 +100,22 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             }
         }
 
-        Log.d("Path", myPath.getAbsolutePath());
-        return myPath.getAbsolutePath();
+        return dicePath.getAbsolutePath();
+    }
 
+    private void saveToFirebase(String name, Bitmap image){
+        //TODO: Get Image and Name as argument
+        //TODO: Open up storage instance and send to storage
+        //TODO: Get download link for image in storage
+        //TODO: Use Userid to get database reference to user's images
+        //TODO: Store the name and download link in user's images in database
+    }
 
+    public void backToDiceBox(){
+        Intent i = new Intent(this, DiceBoxActivity.class);
+        i.putExtra("BoxName", boxName);
+        i.putExtra("UserID", userId);
+        startActivity(i);
     }
 }
 

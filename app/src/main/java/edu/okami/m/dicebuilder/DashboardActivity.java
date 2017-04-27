@@ -1,69 +1,92 @@
 package edu.okami.m.dicebuilder;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import edu.okami.m.dicebuilder.Adapters.ImageAdapter;
+import edu.okami.m.dicebuilder.Adapters.GridAdapter;
+import edu.okami.m.dicebuilder.Dialogs.CreateDiceboxDialog;
+import edu.okami.m.dicebuilder.Dialogs.NoDiceboxDialog;
+import edu.okami.m.dicebuilder.Objects.GridItem;
 
 /**
  * Created by M on 4/22/2017.
  */
 
-public class DashboardActivity extends AppCompatActivity{
+public class DashboardActivity extends AppCompatActivity
+        implements NoDiceboxDialog.NoDiceboxDialogListener, CreateDiceboxDialog.CreateDiceboxDialogListener{
     private final String TAG = "DashboardActivity";
+
+    private File userDirectory;
+    private final String HOME = "home";
+    private String userId;
 
     //Firebase Instances
     StorageReference mStorageReference;
     FirebaseDatabase database;
     DatabaseReference urlReference;
 
-    //LAyout Components
+    //Layout Components
     GridView gridView;
     Button button;
-
-    /**
-     * Dummy Data
-     *
-     */
-    String[] gridViewStrings = {"Dnd", "Warhammer", "Call of Cthulhu"};
-    int[] gridViewImages = {R.drawable.bb, R.drawable.boba_fett, R.drawable.dark_souls};
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        Toolbar dashboardToolbar = (Toolbar)findViewById(R.id.dashboard_toolbar);
+        setSupportActionBar(dashboardToolbar);
+        getSupportActionBar().setTitle("Dashboard");
+
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+
+        userDirectory = new File(getFilesDir(), userId);
+        userDirectory = getDir(userId, Context.MODE_PRIVATE);
+
+        if(!userDirectory.exists()){
+            userDirectory.mkdirs();
+        }
 
         /**
          * Firebase Instantiation
@@ -71,16 +94,43 @@ public class DashboardActivity extends AppCompatActivity{
         database = FirebaseDatabase.getInstance();
         urlReference = database.getReference("URL");
 
-        gridView = (GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(new ImageAdapter(this, gridViewStrings, gridViewImages));
+        gridView = (GridView)findViewById(R.id.dashboard_gridview);
+
+        ArrayList<String> filesArray = getFileNames(userDirectory.listFiles());
+
+        if(filesArray != null){
+            if(filesArray.size() > 0){
+                gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+            } else{
+                NoDiceboxDialog register = new NoDiceboxDialog();
+                register.show(getSupportFragmentManager(), "NoDiceboxDialog");
+            }
+        } else {
+            NoDiceboxDialog register = new NoDiceboxDialog();
+            register.show(getSupportFragmentManager(), "NoDiceboxDialog");
+        }
+
+
 
         gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
+                GridItem item = (GridItem)parent.getItemAtPosition(pos);
                 //TODO: Send intent to DiceBoxActivity
                 Intent i = new Intent(getApplicationContext(), DiceBoxActivity.class);
                 //TODO: Pass name for next activity to retrieve image from Firebase storage
-                i.putExtra("name", "");
+                i.putExtra("BoxName", item.getTitle());
+                i.putExtra("UserID", userId);
                 startActivity(i);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                GridItem item = (GridItem)parent.getItemAtPosition(position);
+
+
+                return true;
             }
         });
 
@@ -88,16 +138,30 @@ public class DashboardActivity extends AppCompatActivity{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Open up dice box creation dialog
-                //TODO: Store in FBStorage and also send download URL to Realtime Database
+                CreateDiceboxDialog register = new CreateDiceboxDialog();
+                register.show(getSupportFragmentManager(), "CreateDiceboxDialog");
             }
         });
+    }
 
-/*
-        Drawable drawable = getResources().getDrawable(R.drawable.boba_fett);
-        Bitmap bm = drawableToBitmap(drawable);
-        uploadFile(bm);
-        */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        //Inflate menu
+        getMenuInflater().inflate(R.menu.dashboard_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        //Handle Tool bar item clicks
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_add_dicebox:
+                break;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -134,6 +198,48 @@ public class DashboardActivity extends AppCompatActivity{
             });
         }
 
+    }
+
+
+    /*
+    * No Dice Box Dialog Implementation
+    *
+     */
+    @Override
+    public void onNoDiceboxPositiveClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+        CreateDiceboxDialog register = new CreateDiceboxDialog();
+        register.show(getSupportFragmentManager(), "CreateDiceboxDialog");
+    }
+
+    @Override
+    public void onNoDiceboxNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }
+
+    /*
+    * Create A Dice Box Dialog Implementation
+    *
+     */
+    @Override
+    public void onCreateDiceboxPositiveClick(DialogFragment dialog){
+        String boxName = ((EditText)dialog.getDialog().findViewById(R.id.createdicebox_dialog_boxname)).getText().toString();
+
+        File directory = new File(userDirectory, boxName);
+        directory.mkdir();
+
+        gridView.setAdapter(new GridAdapter(this, R.layout.gridview_layout, populateGridView()));
+
+        /*
+        Intent i = new Intent(getApplicationContext(), DiceBoxActivity.class);
+        i.putExtra("BoxName", boxName);
+        startActivity(i);
+        */
+    }
+
+    @Override
+    public void onCreateDiceboxNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
     }
 
     private void uploadFile(Bitmap bitmap){
@@ -210,20 +316,40 @@ public class DashboardActivity extends AppCompatActivity{
         return bitmap;
     }
 
-    private void populateGridView(){
-        //
+    private ArrayList<GridItem> populateGridView(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ten_sided_shape);
+        ArrayList<GridItem> arrayOfGridItems = new ArrayList<GridItem>();
+        ArrayList<String> arrayList = getFileNames(userDirectory.listFiles());
 
-    }
+           for(int i = 0; i < arrayList.size(); i++){
+               GridItem tempGI = new GridItem(bitmap, arrayList.get(i));
+               arrayOfGridItems.add(tempGI);
+           }
 
-    private void uploadDiceBoxToStorage(){
-
+        return arrayOfGridItems;
     }
 
     private void uploadNewURL(Uri imageURL){
         urlReference.child("url").setValue(imageURL);
     }
 
-    private void downloadAllURL(){
+    private ArrayList<String> getFileNames(File[] files){
+        ArrayList<String> arrayListFiles = new ArrayList<String>();
 
+        if(files != null){
+            if(files.length == 0){
+                return null;
+            } else{
+                for(int i = 0; i < files.length; i++){
+                    arrayListFiles.add(files[i].getName());
+                }
+            }
+        } else {
+            return null;
+        }
+
+        return arrayListFiles;
     }
+
+
 }
