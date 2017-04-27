@@ -102,6 +102,8 @@ public class DiceBoxActivity extends AppCompatActivity
     @Override
     public void onNoDicePositiveClick(DialogFragment dialog){
         Intent i = new Intent(getApplicationContext(), textureActivity.class);
+        i.putExtra("BoxName", boxName);
+        i.putExtra("UserID", userId);
         startActivity(i);
     }
 

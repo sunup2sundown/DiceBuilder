@@ -30,10 +30,10 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         setContentView(R.layout.activity_texture);
 
         try{
-            boxName = getIntent().getStringExtra("box_name");
-            //boxName = getIntent().getStringExtra("BoxName");
+            //boxName = getIntent().getStringExtra("box_name");
+            boxName = getIntent().getStringExtra("BoxName");
             userId = getIntent().getStringExtra("UserID");
-            Log.d("box name", getIntent().getStringExtra("box_name"));
+            Log.d("box name", getIntent().getStringExtra("boxName"));
         } catch(Exception e){
             e.printStackTrace();
             Log.d("Box name passed", "no");
@@ -76,9 +76,13 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
 
         File myPath=new File(directory, boxName);
+        File dicePath = new File(myPath, diceName+".png");
+
+        Log.d("dicePath", dicePath.getAbsolutePath());
+
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(myPath);
+            fos = new FileOutputStream(dicePath);
             // Use the compress method on the BitMap object to write image to the OutputStream
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
             saveToFirebase(boxName, image);
@@ -92,9 +96,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             }
         }
 
-        Log.d("Path", myPath.getAbsolutePath());
-
-        return myPath.getAbsolutePath();
+        return dicePath.getAbsolutePath();
     }
 
     private void saveToFirebase(String name, Bitmap image){
