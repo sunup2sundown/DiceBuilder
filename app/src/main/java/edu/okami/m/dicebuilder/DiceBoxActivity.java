@@ -94,6 +94,7 @@ public class DiceBoxActivity extends AppCompatActivity
                 String filePath = item.getFilePath();
 
                 if(passPathsToRoll.size() < MAX_DICE){
+                    Log.d("File Path", filePath);
                     passPathsToRoll.add(filePath);
                 } else{
                     Toast.makeText(getApplicationContext(), "You cannot roll anymore dice.", Toast.LENGTH_SHORT).show();

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -22,6 +26,8 @@ public class TextureShowDieFragment extends Fragment {
     Button backToBox;
     TextView nameView;
     String dieName = "";
+    String path;
+    View v;
 
     public TextureShowDieFragment() {
         // Required empty public constructor
@@ -37,7 +43,7 @@ public class TextureShowDieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_texture_show_die, container, false);
+        v = inflater.inflate(R.layout.fragment_texture_show_die, container, false);
 
         backToBox = (Button)v.findViewById(R.id.btn_backToBox);
         nameView = (TextView)v.findViewById(R.id.tv_diceName);
@@ -68,6 +74,18 @@ public class TextureShowDieFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceBundle) {
+
+        super.onActivityCreated(savedInstanceBundle);
+
+        GLSurfaceView renderBox = (GLSurfaceView) v.findViewById(R.id.sv_resultDie);
+        CustomDie customDie = new CustomDie(path, getActivity());
+        ResultRenderer resultRenderer = new ResultRenderer(getActivity(), customDie);
+        renderBox.setRenderer(resultRenderer);
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -76,6 +94,8 @@ public class TextureShowDieFragment extends Fragment {
     public void setDieName(String name){
         this.dieName = name;
     }
+
+    public void setDiePath(String diePath) { this.path = diePath; }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

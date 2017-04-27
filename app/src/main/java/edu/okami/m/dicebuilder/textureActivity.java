@@ -76,6 +76,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
 
     @Override
     public String saveMergedImage(Bitmap image, String diceName) {
+
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir(userId, getApplicationContext().MODE_PRIVATE);
 
@@ -89,7 +90,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             fos = new FileOutputStream(dicePath);
             // Use the compress method on the BitMap object to write image to the OutputStream
             image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            saveToFirebase(boxName, image);
+            //saveToFirebase(boxName, image);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -100,6 +101,8 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
             }
         }
 
+        showDieFragment.setDiePath(dicePath.getAbsolutePath());
+
         return dicePath.getAbsolutePath();
     }
 
@@ -109,6 +112,7 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         //TODO: Get download link for image in storage
         //TODO: Use Userid to get database reference to user's images
         //TODO: Store the name and download link in user's images in database
+
     }
 
     public void backToDiceBox(){
@@ -116,6 +120,26 @@ public class textureActivity extends AppCompatActivity implements TextureCropFra
         i.putExtra("BoxName", boxName);
         i.putExtra("UserID", userId);
         startActivity(i);
+    }
+
+    private void saveToInternalStorage(Bitmap bitmapImage, File dicePath){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(dicePath);
+            Log.d("Mike Path", dicePath.getAbsolutePath());
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

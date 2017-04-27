@@ -22,12 +22,11 @@
             android:textAlignment="center"
             android:textSize="30sp" />
 
-        <ImageView
-            android:id="@+id/imageView"
+        <android.opengl.GLSurfaceView
+            android:id="@+id/sv_resultDie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.83"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+            android:layout_weight="0.83"/>
 
         <Button
             android:id="@+id/btn_backToBox"
