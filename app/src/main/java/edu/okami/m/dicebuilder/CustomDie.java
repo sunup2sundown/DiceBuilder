@@ -3,6 +3,7 @@ package edu.okami.m.dicebuilder;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -48,7 +49,8 @@ public class CustomDie {
 
 
         Bitmap bitmap = loadImageFromStorage();
-        this. numberOfSides = (int) (bitmap.getWidth() / context.getResources().getDisplayMetrics().density / 256);
+        this.numberOfSides = (int) (bitmap.getWidth() / context.getResources().getDisplayMetrics().density / 128);
+        Log.d("Sides", Integer.toString(numberOfSides));
         bitmap.recycle();
 
     }
