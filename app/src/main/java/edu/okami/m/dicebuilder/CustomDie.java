@@ -23,14 +23,12 @@ public class CustomDie {
         this.path = path;
         this.context = context;
 
-        ///data/user/0/edu.okami.m.dicebuilder/app_Test_Dice_Box/Six_Sided_Die.png
+        ///data/user/0/edu.okami.m.dicebuilder/app_userid/Test_Dice_Box/Six_Sided_Die.png
 
-        String[] splitPath = path.split("/app_useid/");
-        String shortPath = splitPath[splitPath.length - 1];
-        splitPath = shortPath.split("/");
+        String[] splitPath = path.split("/");
 
-        this.diceBoxName = splitPath[0];
-        this.dieName = splitPath[1];
+        this.diceBoxName = splitPath[splitPath.length - 2];
+        this.dieName = splitPath[splitPath.length - 1];
 
         splitPath = diceBoxName.split("_");
         diceBoxName = "";
