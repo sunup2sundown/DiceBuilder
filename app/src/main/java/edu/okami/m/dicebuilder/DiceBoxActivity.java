@@ -178,8 +178,10 @@ public class DiceBoxActivity extends AppCompatActivity
 
         ArrayList<String> arrayOfFiles = getFileNames(boxDirectory.listFiles());
 
+
         for(int i = 0; i < arrayOfFiles.size(); i++){
-            String path = boxDirectory.getPath().concat(arrayOfFiles.get(i));
+            String path = boxDirectory.getPath().concat("/"+arrayOfFiles.get(i));
+
             CustomDie cd = new CustomDie(path, getApplicationContext());
 
             DiceItem tempDI = new DiceItem(bitmap, arrayOfFiles.get(i), cd);
