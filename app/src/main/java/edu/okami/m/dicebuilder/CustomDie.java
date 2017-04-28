@@ -49,7 +49,7 @@ public class CustomDie {
 
 
         Bitmap bitmap = loadImageFromStorage();
-        this.numberOfSides = (int) (bitmap.getWidth() / context.getResources().getDisplayMetrics().density / 128);
+        this.numberOfSides = (int) (bitmap.getWidth() / bitmap.getHeight());
         Log.d("Sides", Integer.toString(numberOfSides));
         bitmap.recycle();
 

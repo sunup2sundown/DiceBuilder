@@ -69,9 +69,9 @@ public class TextureMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (diceNameText.getText().toString().equals("")) {
-                    Toast.makeText(activity, "Please Enter a Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please Enter a Name", Toast.LENGTH_SHORT).show();
                 } else {
-                    ((OnFragmentInteractionListener) activity).beginCropFragment(diceNameText.getText().toString(), sides);
+                    ((OnFragmentInteractionListener) getActivity()).beginCropFragment(diceNameText.getText().toString(), sides);
                 }
             }
         });
