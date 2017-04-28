@@ -54,7 +54,7 @@ public class TextureShowDieFragment extends Fragment {
             public void onClick(View view) {
                 //Intent backToBox = new Intent(activity.getApplicationContext(), DiceBoxActivity.class);
                 //startActivity(backToBox);
-                ((OnFragmentInteractionListener)activity).backToDiceBox();
+                ((OnFragmentInteractionListener)getActivity()).backToDiceBox();
             }
         });
 

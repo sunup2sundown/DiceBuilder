@@ -91,14 +91,16 @@ public class TextureCropFragment extends Fragment {
                     imageCount++;
                     if (imageCount == sides) {
                         Bitmap merged = merge(images, sides);
-                        Toast.makeText(activity, "Images Merged", Toast.LENGTH_SHORT).show();
-                        ((OnFragmentInteractionListener) activity).saveMergedImage(merged, diceName);
-                        ((OnFragmentInteractionListener) activity).beginShowDieFragment(diceName);
+                        Toast.makeText(getActivity(), "Images Merged", Toast.LENGTH_SHORT).show();
+                        ((OnFragmentInteractionListener) getActivity()).saveMergedImage(merged, diceName);
+                        ((OnFragmentInteractionListener) getActivity()).beginShowDieFragment(diceName);
                     }
-                    imgCount.setText("Side " + (imageCount + 1) + "/" + sides);
+                    if (imageCount != sides) {
+                        imgCount.setText("Side " + (imageCount + 1) + "/" + sides);
+                    }
                 }
                 else{
-                    Toast.makeText(activity, "You must load an image first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You must load an image first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -156,7 +158,7 @@ public class TextureCropFragment extends Fragment {
             Uri uri = data.getData();
             try {
                 imageLoaded = true;
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
 
                 cropview.setImageBitmap(bitmap);
 
